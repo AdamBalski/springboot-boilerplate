@@ -9,4 +9,4 @@ Template for that file:
 
 ---
 #### Done with:
-* chack pom.xml for maven dependencies
+* check pom.xml for maven dependencies
