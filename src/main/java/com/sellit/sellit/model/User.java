@@ -36,4 +36,24 @@ public class User {
     public int hashCode() {
         return Objects.hash(getUuid(), getLogin(), getFullName(), getEmail(), getPassword(), getRole());
     }
+
+    @Override
+    public String toString() {
+        //noinspection StringBufferReplaceableByString
+        return new StringBuilder()
+                .append("User{")
+                    .append("uuid=")
+                        .append(uuid)
+                    .append(", login='")
+                        .append(login)
+                    .append("', fullName='")
+                        .append(fullName)
+                    .append("', email='")
+                        .append(email)
+                    .append("', password='")
+                        .append(password)
+                    .append("', role=")
+                        .append(role)
+                .append('}').toString();
+    }
 }

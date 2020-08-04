@@ -120,4 +120,12 @@ class UserTest {
     void testHashcodeIsEqualForEqualUsers() {
         Assertions.assertEquals(users.get(1).hashCode(), users.get(2).hashCode());
     }
+
+    @Test
+    void testToString() {
+        String expected = "User{uuid=08a706cf-8ab9-4dcb-bc66-2fe9b56fa1b0, login='username1', " +
+                "fullName='User Name 1', email='user1@name.com', password='encrypted_password1', role=USER}";
+
+        Assertions.assertEquals(expected, users.get(0).toString());
+    }
 }
