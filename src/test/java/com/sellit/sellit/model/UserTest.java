@@ -1,8 +1,10 @@
 package com.sellit.sellit.model;
 
+import com.sellit.sellit.dto.SignUpUserDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,30 @@ class UserTest {
                         Role.ADMIN
                 )
         );
+    }
+
+    @Test
+    void testValueOfSingUpUserDto() {
+        SignUpUserDto userDto = SignUpUserDto.builder()
+                .login("username")
+                .fullName("User Name")
+                .email("user@name.com")
+                .password("password")
+                .build();
+        User user = User.valueOf(userDto);
+        PasswordEncoder passwordEncoder = new com.sellit.sellit.security.PasswordEncoder()
+                .passwordEncoderBean();
+
+        Assertions.assertEquals(UUID.class, user.getUuid().getClass());
+        Assertions.assertEquals("username", user.getLogin());
+        Assertions.assertEquals("User Name", user.getFullName());
+        Assertions.assertEquals("user@name.com", user.getEmail());
+        Assertions.assertTrue(
+                passwordEncoder.matches(
+                        userDto.getPassword(),
+                        user.getPassword())
+        );
+        Assertions.assertEquals(Role.USER, user.getRole());
     }
 
     @Test

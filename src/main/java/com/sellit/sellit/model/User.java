@@ -1,9 +1,11 @@
 package com.sellit.sellit.model;
 
+import com.sellit.sellit.dto.SignUpUserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -12,12 +14,26 @@ import java.util.UUID;
 @NoArgsConstructor
 @Setter @Getter
 public class User {
-    UUID uuid;
-    String login;
-    String fullName;
-    String email;
-    String password;
-    Role role;
+    private UUID uuid;
+    private String login;
+    private String fullName;
+    private String email;
+    private String password;
+    private Role role;
+
+    public static User valueOf(SignUpUserDto signUpUserDto) {
+        PasswordEncoder passwordEncoder = new com.sellit.sellit.security.PasswordEncoder()
+                .passwordEncoderBean();
+
+        return new User(
+                UUID.randomUUID(),
+                signUpUserDto.getLogin(),
+                signUpUserDto.getFullName(),
+                signUpUserDto.getEmail(),
+                passwordEncoder.encode(signUpUserDto.getPassword()),
+                Role.USER
+        );
+    }
 
     @Override
     public boolean equals(Object o) {
