@@ -30,7 +30,8 @@ public class User {
                 signUpUserDto.getLogin(),
                 signUpUserDto.getFullName(),
                 signUpUserDto.getEmail(),
-                passwordEncoder.encode(signUpUserDto.getPassword()),
+                passwordEncoder.encode(signUpUserDto
+                        .getPassword1()),
                 Role.USER
         );
     }

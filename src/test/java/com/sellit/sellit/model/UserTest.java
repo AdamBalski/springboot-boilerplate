@@ -50,7 +50,7 @@ class UserTest {
                 .login("username")
                 .fullName("User Name")
                 .email("user@name.com")
-                .password("password")
+                .password1("password")
                 .build();
         User user = User.valueOf(userDto);
         PasswordEncoder passwordEncoder = new com.sellit.sellit.security.PasswordEncoder()
@@ -62,7 +62,7 @@ class UserTest {
         Assertions.assertEquals("user@name.com", user.getEmail());
         Assertions.assertTrue(
                 passwordEncoder.matches(
-                        userDto.getPassword(),
+                        userDto.getPassword1(),
                         user.getPassword())
         );
         Assertions.assertEquals(Role.USER, user.getRole());
