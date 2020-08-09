@@ -14,7 +14,7 @@ public interface Logger {
                 .map(stackTraceElement -> "\n" + stackTraceElement.toString())
                 .forEach(sb::append);
 
-        error(sb.toString(), source);
+        error(sb, source);
     }
 
     default void log(Object obj, Class source) {
