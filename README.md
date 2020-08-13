@@ -1,4 +1,4 @@
-# Sell it
+# Spring Boilerplate
 
 
 #### Prerequisites to run

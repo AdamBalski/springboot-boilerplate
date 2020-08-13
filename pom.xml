@@ -8,11 +8,11 @@
         <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.sell-it</groupId>
-    <artifactId>sell-it</artifactId>
+    <groupId>pl.adambalski</groupId>
+    <artifactId>springboot-boilerplate</artifactId>
     <version>0.0.1</version>
-    <name>sell-it</name>
-    <description>Sell it</description>
+    <name>springboot-boilerplate</name>
+    <description>Boilerplate for Springboot apps</description>
 
     <properties>
         <java.version>14</java.version>
