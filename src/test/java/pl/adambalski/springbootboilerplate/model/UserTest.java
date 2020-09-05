@@ -3,12 +3,16 @@ package pl.adambalski.springbootboilerplate.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
+import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class UserTest {
@@ -57,26 +61,26 @@ class UserTest {
         PasswordEncoder passwordEncoder = new pl.adambalski.springbootboilerplate.security.PasswordEncoder()
                 .passwordEncoderBean();
 
-        Assertions.assertEquals(UUID.class, user.getUuid().getClass());
-        Assertions.assertEquals("username", user.getLogin());
-        Assertions.assertEquals("User Name", user.getFullName());
-        Assertions.assertEquals("user@name.com", user.getEmail());
+        assertEquals(UUID.class, user.getUuid().getClass());
+        assertEquals("username", user.getLogin());
+        assertEquals("User Name", user.getFullName());
+        assertEquals("user@name.com", user.getEmail());
         Assertions.assertTrue(
                 passwordEncoder.matches(
                         userDto.password1(),
                         user.getPassword())
         );
-        Assertions.assertEquals(Role.USER, user.getRole());
+        assertEquals(Role.USER, user.getRole());
     }
 
     @Test
     void testEqualsWithTheSameObject() {
-        Assertions.assertEquals(users.get(0), users.get(0));
+        assertEquals(users.get(0), users.get(0));
     }
 
     @Test
     void testEqualsWithEqualUsers() {
-        Assertions.assertEquals(users.get(1), users.get(2));
+        assertEquals(users.get(1), users.get(2));
     }
 
     @Test
@@ -145,7 +149,7 @@ class UserTest {
 
     @Test
     void testHashcodeIsEqualForEqualUsers() {
-        Assertions.assertEquals(users.get(1).hashCode(), users.get(2).hashCode());
+        assertEquals(users.get(1).hashCode(), users.get(2).hashCode());
     }
 
     @Test
@@ -153,6 +157,25 @@ class UserTest {
         String expected = "User{uuid=08a706cf-8ab9-4dcb-bc66-2fe9b56fa1b0, login='username1', " +
                 "fullName='User Name 1', email='user1@name.com', password='encrypted_password1', role=USER}";
 
-        Assertions.assertEquals(expected, users.get(0).toString());
+        assertEquals(expected, users.get(0).toString());
+    }
+
+    @Test
+    void testGetUserDetails() {
+        UserDetails expected = new org.springframework.security.core.userdetails.User(
+                "username1", "encrypted_password1", List.of());
+        UserDetails actual = users.get(0).toUserDetails();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetGrantedAuthorities() {
+        GrantedAuthorityImpl grantedAuthority = new GrantedAuthorityImpl(Role.USER);
+
+        assertEquals(
+                List.of(grantedAuthority),
+                users.get(0).getGrantedAuthorities()
+        );
     }
 }
