@@ -1,5 +1,15 @@
 package pl.adambalski.springbootboilerplate.validation;
 
+/**
+ * Performs validation.
+ * {@link #and(Validator)} method allows to stack different validators.<br><br>
+ *
+ * @param <T> class to validate
+ * @param <R> enum containing possible validation results (extends @link {@link ValidationResult})
+ *
+ * @see ValidationResult
+ * @author Adam Balski
+ */
 @FunctionalInterface
 public interface Validator<T, R extends ValidationResult> {
     R validate(T t);

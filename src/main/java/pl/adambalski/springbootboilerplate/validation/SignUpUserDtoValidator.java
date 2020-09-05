@@ -19,11 +19,15 @@ import java.util.regex.Pattern;
  *  * Not empty, so minimum one name<br>
  *  * Capital format (first char of each word is uppercase and is follower by lowercase letters)<br>
  *  * only letters<br>
- *  * example: User Name<br><br><br>
+ *  * example: User Name<br><br>
  *
  *  password:<br>
  *  * both are equal to each other
- *  * format is similar to login's format, but minimum 8 chars
+ *  * format is similar to login's format, but minimum 8 chars<br><br>
+ *
+ * @see Validator
+ * @see SignUpUserDtoValidationResult
+ * @author Adam Balski
  */
 public class SignUpUserDtoValidator {
     private static final Pattern loginPattern = Pattern.compile("[a-zA-Z0-9-+!@#$%^&*()]{5,}");
@@ -36,7 +40,7 @@ public class SignUpUserDtoValidator {
 
     private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> loginValidation =
             signUpUserDto -> {
-                String login = signUpUserDto.getLogin();
+                String login = signUpUserDto.login();
                 Matcher matcher = loginPattern.matcher(login);
                 return matcher.matches() ?
                         SignUpUserDtoValidationResult.SUCCESS :
@@ -45,7 +49,7 @@ public class SignUpUserDtoValidator {
 
     private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> fullNameValidation =
             signUpUserDto -> {
-                String fullName = signUpUserDto.getFullName();
+                String fullName = signUpUserDto.fullName();
 
                 // Check if empty
                 if(fullName.length() == 0) {
@@ -64,13 +68,13 @@ public class SignUpUserDtoValidator {
             };
 
     private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> differentPasswordsValidation =
-            dto -> Objects.equals(dto.getPassword1(), dto.getPassword2()) ?
+            dto -> Objects.equals(dto.password1(), dto.password2()) ?
                     SignUpUserDtoValidationResult.SUCCESS :
                     SignUpUserDtoValidationResult.PASSWORDS_DIFFERENT;
 
     private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> passwordValidation =
             signUpUserDto -> {
-                String password = signUpUserDto.getPassword1();
+                String password = signUpUserDto.password1();
                 Matcher matcher = passwordPattern.matcher(password);
                 return matcher.matches() ?
                         SignUpUserDtoValidationResult.SUCCESS :

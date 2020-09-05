@@ -1,5 +1,12 @@
 package pl.adambalski.springbootboilerplate.wrappers;
 
+/**
+ * Used to wrap to objects into one.<br><br>
+ *
+ * @param <F> First element of pair
+ * @param <S> Second element of pair
+ * @author Adam Balski
+ */
 public class Pair<F, S> {
     private F first;
     private S second;

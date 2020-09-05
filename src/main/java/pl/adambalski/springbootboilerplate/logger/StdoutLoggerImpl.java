@@ -4,6 +4,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ * Basic stdout implementation of {@link Logger}.<br><br>
+ *
+ * @see Logger
+ * @see Status
+ * @author Adam Balski
+ */
 @Component
 public class StdoutLoggerImpl implements Logger {
     @SuppressWarnings("rawtypes")

@@ -1,14 +1,11 @@
 package pl.adambalski.springbootboilerplate.dto;
 
-import lombok.*;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-@Builder
-public class SignUpUserDto {
-    private String login;
-    private String fullName;
-    private String email;
-    private String password1;
-    private String password2;
-}
+/**
+ * Used to exchange data with an api consumer while signing up.<br><br>
+ *
+ * @see pl.adambalski.springbootboilerplate.model.User
+ * @author Adam Balski
+ */
+
+public record SignUpUserDto(String login, String fullName, String email, String password1, String password2) {}

@@ -1,20 +1,34 @@
 package pl.adambalski.springbootboilerplate.wrappers;
 
+/**
+ * Wraps class into itself.<br>
+ * For example may be use to make Integer or int "mutable"
+ * <pre>{@code
+ * void increment(Wrapper<Integer> integer) {
+ *     integer.value++;
+ * }
+ * }</pre>
+ * After executing increment, value would be incremented.
+ * If 'integer' would be pure {@code int} or {@link Integer},
+ * then after incrementing the value would remain the same.<br><br>
+ * @param <C> wrapped class
+ * @author Adam Balski
+ */
 public class Wrapper<C> {
-    C c;
+    C value;
 
-    public Wrapper(C c) {
-        this.c = c;
+    public Wrapper(C value) {
+        this.value = value;
     }
 
     public Wrapper() {
     }
 
-    public C getC() {
-        return c;
+    public C getValue() {
+        return value;
     }
 
-    public void setC(C c) {
-        this.c = c;
+    public void setValue(C value) {
+        this.value = value;
     }
 }

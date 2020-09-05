@@ -1,21 +1,18 @@
 package pl.adambalski.springbootboilerplate.model;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
-import pl.adambalski.springbootboilerplate.logger.Role;
 
 import java.util.Objects;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
+/**
+ * Application's User class<br><br>
+ *
+ * @see SignUpUserDto
+ * @see Role
+ * @author Adam Balski
+ */
 public class User {
     private UUID uuid;
     private String login;
@@ -24,26 +21,85 @@ public class User {
     private String password;
     private Role role;
 
+    public User(UUID uuid, String login, String fullName, String email, String password, Role role) {
+        this.uuid = uuid;
+        this.login = login;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public static User valueOf(SignUpUserDto signUpUserDto) {
-        PasswordEncoder passwordEncoder = new pl.adambalski.springbootboilerplate.security.PasswordEncoder()
-                .passwordEncoderBean();
+        PasswordEncoder passwordEncoder =
+                new pl.adambalski.springbootboilerplate.security
+                        .PasswordEncoder().passwordEncoderBean();
 
         return new User(
                 UUID.randomUUID(),
-                signUpUserDto.getLogin(),
-                signUpUserDto.getFullName(),
-                signUpUserDto.getEmail(),
+                signUpUserDto.login(),
+                signUpUserDto.fullName(),
+                signUpUserDto.email(),
                 passwordEncoder.encode(signUpUserDto
-                        .getPassword1()),
+                        .password1()),
                 Role.USER
         );
+    }
+
+    // Getters, setters, equals, hashcode, toString
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
+        if (!(o instanceof User user)) return false;
+
         return getUuid().equals(user.getUuid()) &&
                 getLogin().equals(user.getLogin()) &&
                 getFullName().equals(user.getFullName()) &&

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
-import pl.adambalski.springbootboilerplate.logger.Role;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +47,12 @@ class UserTest {
 
     @Test
     void testValueOfSingUpUserDto() {
-        SignUpUserDto userDto = SignUpUserDto.builder()
-                .login("username")
-                .fullName("User Name")
-                .email("user@name.com")
-                .password1("password")
-                .build();
+        SignUpUserDto userDto = new SignUpUserDto(
+                "username",
+                "User Name",
+                "user@name.com",
+                "password",
+                "password");
         User user = User.valueOf(userDto);
         PasswordEncoder passwordEncoder = new pl.adambalski.springbootboilerplate.security.PasswordEncoder()
                 .passwordEncoderBean();
@@ -64,7 +63,7 @@ class UserTest {
         Assertions.assertEquals("user@name.com", user.getEmail());
         Assertions.assertTrue(
                 passwordEncoder.matches(
-                        userDto.getPassword1(),
+                        userDto.password1(),
                         user.getPassword())
         );
         Assertions.assertEquals(Role.USER, user.getRole());

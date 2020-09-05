@@ -4,6 +4,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * Logging interface<br><br>
+ *
+ * @see Status
+ * @author Adam Balski
+ */
 @SuppressWarnings("rawtypes")
 @Component
 public interface Logger {
