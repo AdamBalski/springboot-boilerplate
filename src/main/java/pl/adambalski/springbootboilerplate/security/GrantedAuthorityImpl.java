@@ -4,6 +4,14 @@ import pl.adambalski.springbootboilerplate.model.Role;
 
 import org.springframework.security.core.GrantedAuthority;
 
+/**
+ * Simple {@link GrantedAuthority} implementation.
+ * It is based on {@link pl.adambalski.springbootboilerplate.model.User}'s {@link Role}s.
+ *
+ * @see pl.adambalski.springbootboilerplate.model.User
+ * @see Role
+ * @author Adam Balski
+ */
 public class GrantedAuthorityImpl implements GrantedAuthority {
     private final Role role;
 

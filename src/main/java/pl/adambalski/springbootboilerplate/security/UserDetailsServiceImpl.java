@@ -7,6 +7,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
 
+/**
+ * Simple implementation of {@link UserDetailsService} based on {@link pl.adambalski.springbootboilerplate.model.User}s
+ *
+ * @see pl.adambalski.springbootboilerplate.model.User
+ * @see org.springframework.security.core.userdetails.User
+ * @see UserDetailsService
+ * @see UserDetails
+ * @author Adam Balski
+ */
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
