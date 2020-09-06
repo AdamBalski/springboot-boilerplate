@@ -19,7 +19,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService
+        this.userDetailsService = userDetailsService;
     }
 
     @Override

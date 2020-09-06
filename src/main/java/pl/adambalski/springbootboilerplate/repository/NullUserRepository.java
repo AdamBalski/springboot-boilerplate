@@ -1,5 +1,6 @@
 package pl.adambalski.springbootboilerplate.repository;
 
+import org.springframework.stereotype.Component;
 import pl.adambalski.springbootboilerplate.model.User;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 // Used for contextLoads() to pass and for app to start,
 // before building JpaUserRepository
+@Component
 public class NullUserRepository implements UserRepository {
 
     @Override
