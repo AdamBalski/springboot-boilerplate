@@ -6,7 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 /**
  * Simple {@link GrantedAuthority} implementation.
- * It is based on {@link pl.adambalski.springbootboilerplate.model.User}'s {@link Role}s.
+ * It is based on {@link pl.adambalski.springbootboilerplate.model.User}'s {@link Role}s.<br><br>
  *
  * @see pl.adambalski.springbootboilerplate.model.User
  * @see Role

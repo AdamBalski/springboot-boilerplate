@@ -8,13 +8,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import javax.servlet.Filter;
 
 /**
- * Security configuration for the boilerplate
+ * Security configuration for the boilerplate<br><br>
  *
  * @see WebSecurityConfigurerAdapter
  * @see Filter
  * @author Adam Balski
  */
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    public static final String JWT_TOKEN_PREFIX = "Bearer ";
+
     private UserDetailsService userDetailsService;
 
     @Autowired

@@ -9,6 +9,7 @@ import pl.adambalski.springbootboilerplate.repository.UserRepository;
 
 /**
  * Simple implementation of {@link UserDetailsService} based on {@link pl.adambalski.springbootboilerplate.model.User}s
+ * <br><br>
  *
  * @see pl.adambalski.springbootboilerplate.model.User
  * @see org.springframework.security.core.userdetails.User
