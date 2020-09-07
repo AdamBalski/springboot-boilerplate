@@ -3,7 +3,7 @@ package pl.adambalski.springbootboilerplate.logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of {@link Logger}
+ * Slf4j implementation of {@link Logger}<br><br>
  *
  * @see pl.adambalski.springbootboilerplate.logger.Logger
  * @author Adam Balski
