@@ -23,6 +23,11 @@ public class NullUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existsByUsername(String username) {
+        return false;
+    }
+
+    @Override
     public boolean addUser(User user) {
         return false;
     }

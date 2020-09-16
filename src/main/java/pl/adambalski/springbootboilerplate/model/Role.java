@@ -10,7 +10,7 @@ public enum Role {
     USER("ROLE_USER"),
     ADMIN("ROLE_ADMIN");
 
-    public String grantedAuthorityString;
+    public final String grantedAuthorityString;
 
     Role(String grantedAuthorityString) {
         this.grantedAuthorityString = grantedAuthorityString;

@@ -1,6 +1,9 @@
 package pl.adambalski.springbootboilerplate.security.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,13 +15,13 @@ import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class JwtUtilTest {
     private JwtUtil jwtUtil;
     private JwtParser jwtParser;
+    private String username;
 
     @BeforeEach
     void init() {
@@ -35,6 +38,8 @@ class JwtUtilTest {
         this.jwtParser = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build();
+
+        this.username = "username1234";
     }
 
     @Test
@@ -51,9 +56,30 @@ class JwtUtilTest {
         assertThrows(SignatureException.class, executable);
     }
 
+    // "Bearer ".length() == 7
+    @Test
+    void testVerifyAndGetClaimsWhenTokenIsSmallerThan8Characters() {
+        String token = "Broken";
+
+        Executable executable = () -> jwtUtil.verifyAndGetClaims(token);
+        assertThrows(MalformedJwtException.class, executable);
+    }
+
+    @Test
+    void testVerifyAndGetClaimsWhenTokenIsMalformed() {
+        //noinspection SpellCheckingInspection
+        String token =
+                "Bearer this_token_is_malformed" +
+                        "eyJzdWIiOiJlNGE5OGY3OC1hMjUxLTQ3OGYtYmQyNS1kNTFjNGQxOTgwYWEiLCJpYXQiOjE1OTk0MjUyMjcsImV4cCI6MTU5OTQyNTgyNywiaXNzIjoic2VydmVyLWNvcmUifQ." +
+                        "8ll_1tODUBBYU-0Nkao4iC6juaE4elBXu-FGviT7dFiWmbBqtuPBeBdkxlHOC5JA5vQXocGEw2b0Y7S4FcLdXA";
+
+        Executable executable = () -> jwtUtil.verifyAndGetClaims(token);
+        assertThrows(MalformedJwtException.class, executable);
+    }
+
     @Test
     void testVerifyAndGetClaimsDoesNotThrowWithValidSignature() {
-        String token = jwtUtil.tokenOf(UUID.randomUUID());
+        String token = jwtUtil.tokenOf(username);
 
         Executable executable = () -> jwtUtil.verifyAndGetClaims(token);
         assertDoesNotThrow(executable);
@@ -61,16 +87,15 @@ class JwtUtilTest {
 
     @Test
     void testSubjectFromVerifyAndGetClaims() {
-        UUID subject = UUID.randomUUID();
-        String token = jwtUtil.tokenOf(subject);
+        String token = jwtUtil.tokenOf(username);
 
         String actual = jwtUtil.verifyAndGetClaims(token).getSubject();
-        assertEquals(subject.toString(), actual);
+        assertEquals(username, actual);
     }
 
     @Test
     void testIssuerFromVerifyAndGetClaims() {
-        String token = jwtUtil.tokenOf(UUID.randomUUID());
+        String token = jwtUtil.tokenOf(username);
 
         String actual = jwtUtil.verifyAndGetClaims(token).getIssuer();
         assertEquals("server-core", actual);
@@ -78,7 +103,7 @@ class JwtUtilTest {
 
     @Test
     void testIssuedAtFromVerifyAndGetClaims() {
-        String token = jwtUtil.tokenOf(UUID.randomUUID());
+        String token = jwtUtil.tokenOf(username);
 
         int computationTimeMargin = 100;
         Date expected = new Date();
@@ -91,7 +116,7 @@ class JwtUtilTest {
 
     @Test
     void testExpirationDateFromVerifyAndGetClaims() {
-        String token = jwtUtil.tokenOf(UUID.randomUUID());
+        String token = jwtUtil.tokenOf(username);
 
         int computationTimeMargin = 100;
         Date expected = Date.from(Instant.now().plus(Duration.ofMinutes(10)));
@@ -104,9 +129,8 @@ class JwtUtilTest {
 
     @Test
     void testIfSignatureIsValid() {
-        UUID uuid = UUID.randomUUID();
         // without 'Bearer ' prefix
-        String token = jwtUtil.tokenOf(uuid).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
+        String token = jwtUtil.tokenOf(username).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
 
         try {
             jwtParser.parseClaimsJws(token);
@@ -117,19 +141,17 @@ class JwtUtilTest {
 
     @Test
     void testSubjectOfTokenOf() {
-        UUID uuid = UUID.randomUUID();
         // without 'Bearer ' prefix
-        String actual = jwtUtil.tokenOf(uuid).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
+        String actual = jwtUtil.tokenOf(username).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
         Claims claims = jwtParser.parseClaimsJws(actual).getBody();
 
-        assertEquals(uuid.toString(), claims.getSubject());
+        assertEquals(username, claims.getSubject());
     }
 
     @Test
     void testIssuerOfTokenOf() {
-        UUID uuid = UUID.randomUUID();
         // without 'Bearer ' prefix
-        String actual = jwtUtil.tokenOf(uuid).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
+        String actual = jwtUtil.tokenOf(username).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
         Claims claims = jwtParser.parseClaimsJws(actual).getBody();
 
         assertEquals("server-core", claims.getIssuer());
@@ -137,9 +159,8 @@ class JwtUtilTest {
 
     @Test
     void testIfIssuedNow() {
-        UUID uuid = UUID.randomUUID();
         // without 'Bearer ' prefix
-        String actual = jwtUtil.tokenOf(uuid).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
+        String actual = jwtUtil.tokenOf(username).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
         Claims claims = jwtParser.parseClaimsJws(actual).getBody();
 
         int computationTimeMargin = 10;
@@ -151,9 +172,8 @@ class JwtUtilTest {
     // should expire in 10 minutes
     @Test
     void testIfExpiresInProperExpirationTime() {
-        UUID uuid = UUID.randomUUID();
         // without 'Bearer ' prefix
-        String actual = jwtUtil.tokenOf(uuid).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
+        String actual = jwtUtil.tokenOf(username).replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
         Claims claims = jwtParser.parseClaimsJws(actual).getBody();
 
         int computationTimeMargin = 10;

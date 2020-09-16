@@ -11,7 +11,7 @@ import java.util.UUID;
 
 /**
  * SWT utility class used for generating bearer tokens and verifying them.<br>
- * {@link #tokenOf(UUID)} gets JWT out of the uuid and signs it with {@link SecretKey} object from constructor.
+ * {@link #tokenOf(String)} gets JWT out of the uuid and signs it with {@link SecretKey} object from constructor.
  * Token is in a form of 'Bearer ${SWT}'.<br>
  * {@link #verifyAndGetClaims(String)} gets {@link Claims}
  * and verifies if Jwt is malformed, expired or has an invalid signature.
@@ -27,7 +27,7 @@ public class JwtUtil {
     private final Duration expiresIn;
     private final JwtParser jwtParser;
 
-    JwtUtil(SecretKey secretKey) {
+    public JwtUtil(SecretKey secretKey) {
         this(secretKey, Duration.ofMinutes(10));
     }
 
@@ -42,20 +42,20 @@ public class JwtUtil {
     // Checks for token malformation,
     // if the token got expired
     // and if signature is valid
-    Claims verifyAndGetClaims(String token) throws JwtException {
+    public Claims verifyAndGetClaims(String token) throws JwtException {
+        if(token == null)   throw new JwtException("SWT token cannot be null");
+
         token = token.replaceFirst(SecurityConfiguration.JWT_TOKEN_PREFIX, "");
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
-    String tokenOf(UUID subject) {
+    public String tokenOf(String subject) {
         return SecurityConfiguration.JWT_TOKEN_PREFIX + Jwts.builder()
-                .setSubject(subject.toString())
+                .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(Date.from(Instant.now().plus(expiresIn)))
                 .setIssuer("server-core")
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
-
-
 }
