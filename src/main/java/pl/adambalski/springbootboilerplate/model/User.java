@@ -1,8 +1,12 @@
 package pl.adambalski.springbootboilerplate.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
+import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -131,5 +135,19 @@ public class User {
                     .append("', role=")
                         .append(role)
                 .append('}').toString();
+    }
+
+    public UserDetails toUserDetails() {
+        return new org.springframework.security.core.userdetails.User(
+                this.login,
+                this.password,
+                this.getGrantedAuthorities()
+        );
+    }
+
+    public List<GrantedAuthority> getGrantedAuthorities() {
+        return List.of(
+                new GrantedAuthorityImpl(this.role)
+        );
     }
 }

@@ -7,5 +7,12 @@ package pl.adambalski.springbootboilerplate.model;
  * @author Adam Balski
  */
 public enum Role {
-    USER, ADMIN
+    USER("ROLE_USER"),
+    ADMIN("ROLE_ADMIN");
+
+    public final String grantedAuthorityString;
+
+    Role(String grantedAuthorityString) {
+        this.grantedAuthorityString = grantedAuthorityString;
+    }
 }

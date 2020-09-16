@@ -2,7 +2,6 @@ package pl.adambalski.springbootboilerplate.logger;
 
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class LoggerTest {

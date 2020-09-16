@@ -11,9 +11,11 @@ import java.util.UUID;
  *
  * @author Adam Balski
  */
+@SuppressWarnings("SameReturnValue")
 public interface UserRepository {
     Optional<User> getByLogin(String login);
     Optional<User> getByUUID(UUID uuid);
+    boolean existsByUsername(String username);
     boolean addUser(User user);
     boolean doesUserWithEmailOrLoginExist(String email, String login);
     boolean deleteUser(String login);

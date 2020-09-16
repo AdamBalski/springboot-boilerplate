@@ -7,5 +7,5 @@ package pl.adambalski.springbootboilerplate.validation;
  * @author Adam Balski
  */
 public interface ValidationResult {
-    public boolean isSuccess();
+    boolean isSuccess();
 }
