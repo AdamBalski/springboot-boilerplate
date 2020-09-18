@@ -1,5 +1,5 @@
 # Spring Boilerplate
-## Boilerplate code for springboot. It contains user management via rest api with connection to postgresql database.
+## Boilerplate code for springboot. It contains user management via rest api and connects to a postgresql database.
 
 ### Prerequisites to run
 If you want to start the server alone then first you have to add in the `resources` directory a file called `application.properties`.
