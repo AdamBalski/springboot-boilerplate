@@ -15,13 +15,10 @@ package pl.adambalski.springbootboilerplate.wrappers;
  * @author Adam Balski
  */
 public class Wrapper<C> {
-    C value;
+    private C value;
 
     public Wrapper(C value) {
         this.value = value;
-    }
-
-    public Wrapper() {
     }
 
     public C getValue() {
