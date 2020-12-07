@@ -74,7 +74,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Authentication authentication = userDetailsAuthenticationConverter.convert(userDetails);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println("venus_logs" + username);
         } catch (JwtException | UsernameNotFoundException exception) {
             // pass (SecurityContext is cleared)
         }

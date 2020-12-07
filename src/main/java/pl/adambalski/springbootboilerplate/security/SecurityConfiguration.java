@@ -4,6 +4,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -11,6 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfigurationSource;
 import pl.adambalski.springbootboilerplate.security.filter.JwtAuthFilter;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 
@@ -33,11 +37,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
     private JwtUtil jwtUtil;
+    private CsrfTokenRepository csrfTokenRepository;
+    private CorsConfigurationSource corsConfigurationSource;
+
+    @Autowired
+    public SecurityConfiguration() {
+        this.jwtUtil = new JwtUtil(KEY);
+        this.csrfTokenRepository = new CookieCsrfTokenRepository();
+    }
 
     @Autowired
     private void setUserDetailsService(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
-        this.jwtUtil = new JwtUtil(KEY);
     }
 
     @Override
@@ -47,9 +58,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 // CORS
-                .cors().disable()
+                .cors().and()
                 // CSRF
-                .csrf().disable()
+                .csrf()
+                    .csrfTokenRepository(csrfTokenRepository)
+                        .ignoringRequestMatchers(new AntPathRequestMatcher(
+                                "/api/user/authenticate",
+                                HttpMethod.POST.name()
+                        )).and()
                 // Sessions
                 .sessionManagement().disable()
                 // Filters
