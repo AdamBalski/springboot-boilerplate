@@ -1,7 +1,9 @@
 package pl.adambalski.springbootboilerplate.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * {@link #passwordEncoderBean()} returns a bean of {@link org.springframework.security.crypto.password.PasswordEncoder}<br><br>
@@ -9,9 +11,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * @see org.springframework.security.crypto.password.PasswordEncoder
  * @author Adam Balski
  */
-public class PasswordEncoder {
+@Configuration
+public class PasswordEncoderFactory {
     @Bean("passwordEncoder")
-    public org.springframework.security.crypto.password.PasswordEncoder passwordEncoderBean() {
+    public PasswordEncoder passwordEncoderBean() {
         return new BCryptPasswordEncoder(10);
     }
 }

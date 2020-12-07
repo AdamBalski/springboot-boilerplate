@@ -34,11 +34,7 @@ public class User {
         this.role = role;
     }
 
-    public static User valueOf(SignUpUserDto signUpUserDto) {
-        PasswordEncoder passwordEncoder =
-                new pl.adambalski.springbootboilerplate.security
-                        .PasswordEncoder().passwordEncoderBean();
-
+    public static User valueOf(SignUpUserDto signUpUserDto, PasswordEncoder passwordEncoder) {
         return new User(
                 UUID.randomUUID(),
                 signUpUserDto.login(),

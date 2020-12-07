@@ -55,7 +55,7 @@ class JwtAuthFilterTest {
 
         // Components used in tests
         userDetailsService = mock(UserDetailsService.class);
-        filter = new JwtAuthFilter(userDetailsService, jwtUtil);
+        filter = new JwtAuthFilter(() -> userDetailsService, jwtUtil);
         filterChain = mock(FilterChain.class);
 
         // Reset SecurityContext

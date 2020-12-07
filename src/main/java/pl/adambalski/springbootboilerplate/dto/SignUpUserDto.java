@@ -1,6 +1,5 @@
 package pl.adambalski.springbootboilerplate.dto;
 
-
 /**
  * Used to exchange data with an api consumer while signing up.<br><br>
  *
