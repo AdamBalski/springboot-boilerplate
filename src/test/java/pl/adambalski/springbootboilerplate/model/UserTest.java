@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
+import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,15 +52,15 @@ class UserTest {
 
     @Test
     void testValueOfSingUpUserDto() {
+        PasswordEncoder passwordEncoder = new PasswordEncoderFactory().passwordEncoderBean();
+
         SignUpUserDto userDto = new SignUpUserDto(
                 "username",
                 "User Name",
                 "user@name.com",
                 "password",
                 "password");
-        User user = User.valueOf(userDto);
-        PasswordEncoder passwordEncoder = new pl.adambalski.springbootboilerplate.security.PasswordEncoder()
-                .passwordEncoderBean();
+        User user = User.valueOf(userDto, passwordEncoder);
 
         assertEquals(UUID.class, user.getUuid().getClass());
         assertEquals("username", user.getLogin());

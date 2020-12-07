@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.function.Supplier;
 
 /**
  * Checks for SWT (signed json web token) and sets {@link SecurityContextHolder}.<br>
@@ -38,7 +39,7 @@ import java.io.IOException;
  * @author Adam Balski
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final UserDetailsService userDetailsService;
+    private final Supplier<UserDetailsService> userDetailsServiceSupplier;
     private final JwtUtil jwtUtil;
 
     private static final Converter<UserDetails, Authentication> userDetailsAuthenticationConverter = userDetails ->
@@ -48,13 +49,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     userDetails.getAuthorities()
             );
 
-    JwtAuthFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil) {
-        this.userDetailsService = userDetailsService;
+    public JwtAuthFilter(Supplier<UserDetailsService> userDetailsServiceSupplier, JwtUtil jwtUtil) {
+        this.userDetailsServiceSupplier = userDetailsServiceSupplier;
         this.jwtUtil = jwtUtil;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        UserDetailsService userDetailsService = userDetailsServiceSupplier.get();
+
         String token = request.getHeader("authorization");
         if(token == null) {
             filterChain.doFilter(request, response);
@@ -71,6 +74,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Authentication authentication = userDetailsAuthenticationConverter.convert(userDetails);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("venus_logs" + username);
         } catch (JwtException | UsernameNotFoundException exception) {
             // pass (SecurityContext is cleared)
         }
