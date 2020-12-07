@@ -16,6 +16,17 @@ import pl.adambalski.springbootboilerplate.dto.LoginDto;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 
+/**
+ * Contains a function responsible for authenticating a user, which returns a jwt token.<br><br>
+ *
+ * @see SecurityConfiguration
+ * @see UserDetailsService
+ * @see UserDetails
+ * @see JwtUtil
+ * @see PasswordEncoder
+ * @author Adam Balski
+ */
+
 @ComponentScan("pl.adambalski.springbootboilerplate")
 @RestController
 @CrossOrigin
@@ -37,6 +48,7 @@ public class AuthenticationController {
         String username = loginDto.username();
         String password = loginDto.password();
 
+        // 3 lines below can throw HttpStatus.BAD_REQUEST (HTTP 400) error or HTTPStatus.UNAUTHORIZED (HTTP 401) error
         checkIfCredentialsAreNull(username, password);
         UserDetails userDetails = loadUserDetails(username);
         checkIfPasswordMatches(userDetails, password);
