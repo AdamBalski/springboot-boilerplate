@@ -37,25 +37,37 @@ public class AuthenticationController {
         String username = loginDto.username();
         String password = loginDto.password();
 
-        if(username == null || password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
+        checkIfCredentialsAreNull(username, password);
+        UserDetails userDetails = loadUserDetails(username);
+        checkIfPasswordMatches(userDetails, password);
 
-        UserDetails userDetails;
-        try {
-            userDetails = userDetailsService.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
-        if(!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
-        JwtTokenDto token = new JwtTokenDto(jwtUtil.tokenOf(username));
-
+        JwtTokenDto token = getJwtTokenDto(username);
         return new ResponseEntity<>(
                 token.toJson(),
                 HttpStatus.OK);
+    }
+
+    private void checkIfCredentialsAreNull(String username, String password) {
+        if(username == null || password == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private UserDetails loadUserDetails(String username) {
+        try {
+            return userDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private void checkIfPasswordMatches(UserDetails userDetails, String password) {
+        if(!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private JwtTokenDto getJwtTokenDto(String username) {
+        return new JwtTokenDto(jwtUtil.tokenOf(username));
     }
 }
