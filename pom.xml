@@ -15,7 +15,7 @@
     <description>Boilerplate for Springboot apps</description>
 
     <properties>
-        <java.version>14</java.version>
+        <java.version>15</java.version>
 
         <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
         <spring-security-test.version>5.3.3.RELEASE</spring-security-test.version>
@@ -115,8 +115,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>14</source>
-                    <target>14</target>
+                    <source>15</source>
+                    <target>15</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
