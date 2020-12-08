@@ -2,7 +2,6 @@ package pl.adambalski.springbootboilerplate.repository;
 
 import pl.adambalski.springbootboilerplate.model.User;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,13 +12,20 @@ import java.util.UUID;
  */
 @SuppressWarnings("SameReturnValue")
 public interface UserRepository {
-    Optional<User> getByLogin(String login);
+    // Get by
     Optional<User> getByUUID(UUID uuid);
-    boolean existsByUsername(String username);
+    Optional<User> getByLogin(String login);
+
+    // Exists by
+    boolean existsByLoginOrEmail(String login, String email);
+    boolean existsByLogin(String login);
+    boolean existsByEmail(String email);
+
+    // Add, delete
     boolean addUser(User user);
-    boolean doesUserWithEmailOrLoginExist(String email, String login);
     boolean deleteUser(String login);
+
+    // Ban, unban
     boolean banEmail(String email);
     boolean unbanEmail(String email);
-    List<User> get10UsersStartingFromNth(int n);
 }

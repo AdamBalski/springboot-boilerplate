@@ -3,15 +3,20 @@ package pl.adambalski.springbootboilerplate.service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.server.ResponseStatusException;
+import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.model.Role;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
+import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,32 +32,20 @@ class UserServiceTest {
     @Mock
     UserRepository userRepository;
 
+    // Mock that is injected in void init() method
+    PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void init() {
         this.autoCloseable = MockitoAnnotations.openMocks(this);
+
+        passwordEncoder = new PasswordEncoderFactory().passwordEncoderBean();
+        ReflectionTestUtils.setField(userService, "passwordEncoder", passwordEncoder);
     }
 
     @AfterEach
     void destroy() throws Exception {
         this.autoCloseable.close();
-    }
-
-    @Test
-    void testDoesUserWithEmailOrLoginExistWhenItDoes() {
-        when(userRepository.doesUserWithEmailOrLoginExist("email", "login"))
-                .thenReturn(true);
-
-        assertTrue(userService.doesUserWithEmailOrLoginExist("email", "login"));
-        verify(userRepository).doesUserWithEmailOrLoginExist("email", "login");
-    }
-
-    @Test
-    void testDoesUserWithEmailOrLoginExistWhenItDoesNot() {
-        when(userRepository.doesUserWithEmailOrLoginExist("email", "login"))
-                .thenReturn(false);
-
-        assertFalse(userService.doesUserWithEmailOrLoginExist("email", "login"));
-        verify(userRepository).doesUserWithEmailOrLoginExist("email", "login");
     }
 
     @Test
@@ -73,24 +66,6 @@ class UserServiceTest {
 
         assertFalse(userService.addUser(user));
         verify(userRepository).addUser(user);
-    }
-
-    @Test
-    void testUnbanEmail() {
-        when(userRepository.unbanEmail("email"))
-                .thenReturn(true);
-
-        assertTrue(userService.unbanEmail("email"));
-        verify(userRepository).unbanEmail("email");
-    }
-
-    @Test
-    void testUnbanEmailNotSuccessfully() {
-        when(userRepository.unbanEmail("email"))
-                .thenReturn(false);
-
-        assertFalse(userService.unbanEmail("email"));
-        verify(userRepository).unbanEmail("email");
     }
 
     @Test
@@ -134,72 +109,117 @@ class UserServiceTest {
         assertEquals(Optional.empty(), userService.getUserByUUID(uuid));
     }
 
-    @Test
-    void testGet10UsersStartingFromNth() {
-        List<User> users = new ArrayList<>(10);
-        for(int i = 0; i < 10; i++) {
-            users.add(getRandUser());
+    void testAddSignUpUserDto(SignUpUserDto signUpUserDto,
+                              boolean expectedResult,
+                              boolean shouldThrowResponseStatusException,
+                              String expectedReason) {
+        Executable executable = () -> assertEquals(expectedResult, userService.addSignUpUserDto(signUpUserDto));
+
+        if(shouldThrowResponseStatusException) {
+            // assert that exception was thrown and get the exception
+            var responseStatusException = assertThrows(ResponseStatusException.class, executable);
+            assertEquals(expectedReason, responseStatusException.getReason());
+            // verify nothing was put into repository
+            Mockito.verify(userRepository, never()).addUser(any());
         }
-
-        when(userRepository.get10UsersStartingFromNth(30)).thenReturn(users);
-        assertEquals(users, userService.get10UsersStartingFromNth(30));
+        else {
+            assertDoesNotThrow(executable);
+            Mockito.verify(userRepository).addUser(any(User.class));
+        }
     }
 
     @Test
-    void testDeleteUserAndBanEmail() {
-        when(userRepository.deleteUser("login"))
-                .thenReturn(true);
-        when(userRepository.banEmail("email"))
-                .thenReturn(true);
+    void testAddSignUpUserDtoWhenEverythingIsOk() {
+        Mockito.when(userRepository.addUser(any(User.class))).thenReturn(true);
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "Full Name",
+                "e@mail.png",
+                "password",
+                "password");
 
-        boolean actual = userService.deleteUserAndBanEmail("login", "email");
-
-        assertTrue(actual);
-        verify(userRepository).deleteUser("login");
-        verify(userRepository).banEmail("email");
+        testAddSignUpUserDto(signUpUserDto, true, false, null);
     }
 
     @Test
-    void testDeleteUserAndBanEmailWhenBanningEmailHaveNotSucceeded() {
-        when(userRepository.deleteUser("login"))
-                .thenReturn(true);
-        when(userRepository.banEmail("email"))
-                .thenReturn(false);
+    void testAddSignUpUserDtoWhenLoginIsInvalid() {
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "",
+                "Full Name",
+                "e@mail.png",
+                "password",
+                "password");
 
-        boolean actual = userService.deleteUserAndBanEmail("login", "email");
-
-        assertFalse(actual);
-        verify(userRepository).deleteUser("login");
-        verify(userRepository).banEmail("email");
+        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
     }
 
     @Test
-    void testDeleteUserAndBanEmailWhenDeletingUserHaveNotSucceeded() {
-        when(userRepository.deleteUser("login"))
-                .thenReturn(false);
-        when(userRepository.banEmail("email"))
-                .thenReturn(true);
+    void testAddSignUpUserDtoWhenFullNameIsInvalid() {
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "@",
+                "e@mail.png",
+                "password",
+                "password");
 
-        boolean actual = userService.deleteUserAndBanEmail("login", "email");
-
-        assertFalse(actual);
-        verify(userRepository).deleteUser("login");
-        // Short circuit evaluation makes userRepository.banEmail(email) not to execute
-        verify(userRepository, never()).banEmail("email");
+        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
     }
 
     @Test
-    void testDeleteUserAndBanEmailWhenItHaveNotHaveNotSucceeded() {
-        when(userRepository.deleteUser("login"))
-                .thenReturn(true);
-        when(userRepository.banEmail("email"))
-                .thenReturn(false);
+    void testAddSignUpUserDtoWhenLoginAndFullNameAreInvalid() {
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "",
+                "@",
+                "e@mail.png",
+                "password",
+                "password");
 
-        boolean actual = userService.deleteUserAndBanEmail("login", "email");
+        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
+    }
 
-        assertFalse(actual);
-        verify(userRepository).deleteUser("login");
-        verify(userRepository).banEmail("email");
+    @Test
+    void testAddSignUpUserDtoWhenLoginIsTaken() {
+        Mockito.when(userRepository.existsByLogin("login")).thenReturn(true);
+        Mockito.when(userRepository.existsByLoginOrEmail("login", "e@mail.png")).thenReturn(true);
+
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "Full Name",
+                "e@mail.png",
+                "password",
+                "password");
+
+        testAddSignUpUserDto(signUpUserDto, false, true, "LOGIN_IS_TAKEN");    }
+
+    @Test
+    void testAddSignUpUserDtoWhenEmailIsTaken() {
+        Mockito.when(userRepository.existsByEmail("e@mail.com")).thenReturn(true);
+        Mockito.when(userRepository.existsByLoginOrEmail("login", "e@mail.png")).thenReturn(true);
+
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "Full Name",
+                "e@mail.png",
+                "password",
+                "password");
+
+        testAddSignUpUserDto(signUpUserDto, false, true, "EMAIL_IS_TAKEN");
+    }
+
+    @Test
+    void testAddSignUpUserDtoWhenEmailAndLoginAreTaken() {
+        Mockito.when(userRepository.existsByLogin("login")).thenReturn(true);
+        Mockito.when(userRepository.existsByEmail("e@mail.com")).thenReturn(true);
+        Mockito.when(userRepository.existsByLoginOrEmail("login", "e@mail.png")).thenReturn(true);
+
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "Full Name",
+                "e@mail.png",
+                "password",
+                "password");
+
+        testAddSignUpUserDto(signUpUserDto, false, true, "LOGIN_IS_TAKEN");
     }
 
     @Test

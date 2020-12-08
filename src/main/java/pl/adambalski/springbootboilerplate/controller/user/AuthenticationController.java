@@ -3,13 +3,15 @@ package pl.adambalski.springbootboilerplate.controller.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.adambalski.springbootboilerplate.dto.JwtTokenDto;
 import pl.adambalski.springbootboilerplate.dto.LoginDto;
@@ -44,19 +46,16 @@ public class AuthenticationController {
 
     @PostMapping(value = "/api/user/authenticate")
     @PreAuthorize(value = "permitAll()")
-    public ResponseEntity<String> authenticate(@RequestBody LoginDto loginDto) {
+    public JwtTokenDto authenticate(@RequestBody LoginDto loginDto) {
         String username = loginDto.username();
         String password = loginDto.password();
 
-        // 3 lines below can throw HttpStatus.BAD_REQUEST (HTTP 400) error or HTTPStatus.UNAUTHORIZED (HTTP 401) error
+        // 3 lines below can throw HttpStatus.BAD_REQUEST (HTTP 400) or HTTPStatus.UNAUTHORIZED (HTTP 401)
         checkIfCredentialsAreNull(username, password);
         UserDetails userDetails = loadUserDetails(username);
         checkIfPasswordMatches(userDetails, password);
 
-        JwtTokenDto token = getJwtTokenDto(username);
-        return new ResponseEntity<>(
-                token.toJson(),
-                HttpStatus.OK);
+        return getJwtTokenDto(username);
     }
 
     private void checkIfCredentialsAreNull(String username, String password) {

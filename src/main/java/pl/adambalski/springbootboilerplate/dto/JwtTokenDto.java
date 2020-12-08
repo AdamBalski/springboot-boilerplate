@@ -7,12 +7,18 @@ package pl.adambalski.springbootboilerplate.dto;
  * @author Adam Balski
  */
 
-public record JwtTokenDto(String token) {
-    public String toJson() {
-        StringBuilder result = new StringBuilder("{\"token\": \"");
-        result.append(this.token);
-        result.append("\"}");
+public class JwtTokenDto {
+    private String token;
 
-        return result.toString();
+    public JwtTokenDto(String token) {
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

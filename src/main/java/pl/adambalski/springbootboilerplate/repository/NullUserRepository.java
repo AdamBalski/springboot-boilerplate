@@ -3,7 +3,6 @@ package pl.adambalski.springbootboilerplate.repository;
 import org.springframework.stereotype.Component;
 import pl.adambalski.springbootboilerplate.model.User;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,17 +22,22 @@ public class NullUserRepository implements UserRepository {
     }
 
     @Override
-    public boolean existsByUsername(String username) {
+    public boolean existsByLoginOrEmail(String login, String email) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByLogin(String login) {
+        return false;
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
         return false;
     }
 
     @Override
     public boolean addUser(User user) {
-        return false;
-    }
-
-    @Override
-    public boolean doesUserWithEmailOrLoginExist(String email, String login) {
         return false;
     }
 
@@ -50,10 +54,5 @@ public class NullUserRepository implements UserRepository {
     @Override
     public boolean unbanEmail(String email) {
         return false;
-    }
-
-    @Override
-    public List<User> get10UsersStartingFromNth(int n) {
-        return null;
     }
 }
