@@ -12,7 +12,7 @@ import pl.adambalski.springbootboilerplate.service.UserService;
 import java.util.Optional;
 
 /**
- * Basic rest implementation <br><br>
+ * UserController <br><br>
  *
  * @see RestController
  * @author Adam Balski

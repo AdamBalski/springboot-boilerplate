@@ -90,7 +90,8 @@ public class AdminServiceTest {
         String login = "login";
         Mockito.when(adminRepository.deleteUserByLogin(login)).thenReturn(true);
 
-        assertTrue(adminService.deleteUserByLogin(login));
+        Executable executable = () -> adminService.deleteUserByLogin(login);
+        assertDoesNotThrow(executable);
 
         Mockito.verify(adminRepository).deleteUserByLogin(login);
     }
@@ -100,7 +101,8 @@ public class AdminServiceTest {
         String login = "login";
         Mockito.when(adminRepository.deleteUserByLogin(login)).thenReturn(false);
 
-        assertFalse(adminService.deleteUserByLogin(login));
+        Executable executable = () -> adminService.deleteUserByLogin(login);
+        assertThrows(NoSuchUserException.class, executable);
 
         Mockito.verify(adminRepository).deleteUserByLogin(login);
     }

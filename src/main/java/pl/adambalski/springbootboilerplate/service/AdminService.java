@@ -1,6 +1,7 @@
 package pl.adambalski.springbootboilerplate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.AdminRepository;
@@ -8,6 +9,12 @@ import pl.adambalski.springbootboilerplate.repository.AdminRepository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Performs main logic of operations like getting data from a user account or deleting a user account.<br><br>
+ *
+ * @author Adam Balski
+ */
+@Service
 public class AdminService {
     private AdminRepository adminRepository;
 
@@ -26,7 +33,9 @@ public class AdminService {
         return optionalUser.orElseThrow(NoSuchUserException::new);
     }
 
-    boolean deleteUserByLogin(String login) {
-        return adminRepository.deleteUserByLogin(login);
+    public void deleteUserByLogin(String login) {
+        if(!adminRepository.deleteUserByLogin(login)) {
+            throw new NoSuchUserException();
+        }
     }
 }

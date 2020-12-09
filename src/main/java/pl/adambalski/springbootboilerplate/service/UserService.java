@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Performs main logic of operations such as registering, authentication and deletion of an account<br><br>
+ * Performs main logic of operations like registering, authentication and deletion of an account.<br><br>
  *
  * @author Adam Balski
  */
