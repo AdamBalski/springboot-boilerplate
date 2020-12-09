@@ -12,6 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.server.ResponseStatusException;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
+import pl.adambalski.springbootboilerplate.exception.AtLeastOneFieldIncorrectException;
+import pl.adambalski.springbootboilerplate.exception.EmailIsTakenException;
+import pl.adambalski.springbootboilerplate.exception.LoginIsTakenException;
+import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.Role;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
@@ -49,76 +53,58 @@ class UserServiceTest {
     }
 
     @Test
-    void testAddUser() {
-        User user = getRandUser();
-        when(userRepository.addUser(user))
-                .thenReturn(true);
-
-        assertTrue(userService.addUser(user));
-        verify(userRepository).addUser(user);
-    }
-
-    @Test
-    void testAddUserNotSuccessfully() {
-        User user = getRandUser();
-        when(userRepository.addUser(user))
-                .thenReturn(false);
-
-        assertFalse(userService.addUser(user));
-        verify(userRepository).addUser(user);
-    }
-
-    @Test
     void testGetUserDataByLogin() {
         String login = "user";
-        Optional<User> userOptional = Optional.of(getRandUser());
+        User user = getRandUser();
+        Optional<User> userOptional = Optional.of(user);
 
-        when(userRepository.getByLogin(login))
+        when(userRepository.getUserByLogin(login))
                 .thenReturn(userOptional);
 
-        assertEquals(userOptional, userService.getUserByLogin(login));
+        assertEquals(user, userService.getUserByLogin(login));
     }
 
 
     @Test
     void testGetUserDataByLoginWhenThatLoginDoesNotExist() {
         String login = "user";
-        when(userRepository.getByLogin(login))
+        when(userRepository.getUserByLogin(login))
                 .thenReturn(Optional.empty());
 
-        assertEquals(Optional.empty(), userService.getUserByLogin(login));
+        Executable executable = () -> userService.getUserByLogin(login);
+        assertThrows(NoSuchUserException.class, executable);
     }
 
     @Test
     void testGetUserDataByUUID() {
         UUID uuid = UUID.randomUUID();
-        Optional<User> userOptional = Optional.of(getRandUser());
+        User user = getRandUser();
+        Optional<User> userOptional = Optional.of(user);
 
-        when(userRepository.getByUUID(uuid))
+        when(userRepository.getUserByUUID(uuid))
                 .thenReturn(userOptional);
 
-        assertEquals(userOptional, userService.getUserByUUID(uuid));
+        assertEquals(user, userService.getUserByUUID(uuid));
     }
 
     @Test
     void testGetUserDataByUUIDWhenThatUuidDoesNotExist() {
         UUID uuid = UUID.randomUUID();
-        when(userRepository.getByUUID(uuid))
+        when(userRepository.getUserByUUID(uuid))
                 .thenReturn(Optional.empty());
 
-        assertEquals(Optional.empty(), userService.getUserByUUID(uuid));
+        Executable executable = () -> userService.getUserByUUID(uuid);
+        assertThrows(NoSuchUserException.class, executable);
     }
 
-    void testAddSignUpUserDto(SignUpUserDto signUpUserDto,
-                              boolean expectedResult,
-                              boolean shouldThrowResponseStatusException,
-                              String expectedReason) {
-        Executable executable = () -> assertEquals(expectedResult, userService.addSignUpUserDto(signUpUserDto));
-
-        if(shouldThrowResponseStatusException) {
+    <T extends ResponseStatusException> void testAddSignUpUserDto(SignUpUserDto signUpUserDto,
+                              boolean shouldThrowException,
+                              Class<T> exceptionClassOughtToBeThrown) {
+        Executable executable = () -> userService.addSignUpUserDto(signUpUserDto);
+        if(shouldThrowException) {
             // assert that exception was thrown and get the exception
-            var responseStatusException = assertThrows(ResponseStatusException.class, executable);
-            assertEquals(expectedReason, responseStatusException.getReason());
+            var exception = assertThrows(ResponseStatusException.class, executable);
+            assertEquals(exceptionClassOughtToBeThrown, exception.getClass());
             // verify nothing was put into repository
             Mockito.verify(userRepository, never()).addUser(any());
         }
@@ -138,7 +124,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, true, false, null);
+        testAddSignUpUserDto(signUpUserDto, false, null);
     }
 
     @Test
@@ -150,7 +136,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
+        testAddSignUpUserDto(signUpUserDto, true, AtLeastOneFieldIncorrectException.class);
     }
 
     @Test
@@ -162,7 +148,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
+        testAddSignUpUserDto(signUpUserDto, true, AtLeastOneFieldIncorrectException.class);
     }
 
     @Test
@@ -174,7 +160,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "SOME_FIELD_IS_INCORRECT");
+        testAddSignUpUserDto(signUpUserDto, true, AtLeastOneFieldIncorrectException.class);
     }
 
     @Test
@@ -189,7 +175,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "LOGIN_IS_TAKEN");    }
+        testAddSignUpUserDto(signUpUserDto, true, LoginIsTakenException.class);    }
 
     @Test
     void testAddSignUpUserDtoWhenEmailIsTaken() {
@@ -203,7 +189,7 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "EMAIL_IS_TAKEN");
+        testAddSignUpUserDto(signUpUserDto, true, EmailIsTakenException.class);
     }
 
     @Test
@@ -219,29 +205,29 @@ class UserServiceTest {
                 "password",
                 "password");
 
-        testAddSignUpUserDto(signUpUserDto, false, true, "LOGIN_IS_TAKEN");
+        testAddSignUpUserDto(signUpUserDto, true, LoginIsTakenException.class);
     }
 
     @Test
     void testDeleteUser() {
-        when(userRepository.deleteUser("login"))
+        when(userRepository.deleteUserByLogin("login"))
                 .thenReturn(true);
 
-        boolean actual = userService.deleteUser("login");
+        boolean actual = userService.deleteUserByLogin("login");
 
         assertTrue(actual);
-        verify(userRepository).deleteUser("login");
+        verify(userRepository).deleteUserByLogin("login");
     }
 
     @Test
     void testDeleteUserWithFailure() {
-        when(userRepository.deleteUser("login"))
+        when(userRepository.deleteUserByLogin("login"))
                 .thenReturn(false);
 
-        boolean actual = userService.deleteUser("login");
+        boolean actual = userService.deleteUserByLogin("login");
 
         assertFalse(actual);
-        verify(userRepository).deleteUser("login");
+        verify(userRepository).deleteUserByLogin("login");
     }
 
     User getRandUser() {

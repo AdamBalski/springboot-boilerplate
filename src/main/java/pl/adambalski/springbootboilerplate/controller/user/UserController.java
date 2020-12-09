@@ -9,8 +9,6 @@ import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.service.UserService;
 
-import java.util.Optional;
-
 /**
  * UserController <br><br>
  *
@@ -20,24 +18,23 @@ import java.util.Optional;
 // TODO test
 @RestController
 public class UserController {
-    UserService userService;
+    private final UserService userService;
 
     @Autowired
-    private void setUserService(UserService userService) {
+    UserController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping(value = "/api/user/get-data")
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
     public User getOwnData() {
-        Optional<User> userOptional = userService.getUserByLogin(getUsername());
-        return userOptional.orElseThrow(IllegalStateException::new);
+        return userService.getUserByLogin(getUsername());
     }
 
     @DeleteMapping(value = "/api/user/delete-logged-user")
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
     public void deleteLoggedUser() {
-        userService.deleteUser(getUsername());
+        userService.deleteUserByLogin(getUsername());
     }
 
     @PutMapping(value = "/api/user/sign-up")

@@ -11,12 +11,12 @@ import java.util.UUID;
 @Repository
 public class NullAdminRepository implements AdminRepository {
     @Override
-    public Optional<User> getUserDataByUUID(UUID uuid) {
+    public Optional<User> getUserByUUID(UUID uuid) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<User> getUserDataByLogin(String login) {
+    public Optional<User> getUserByLogin(String login) {
         return Optional.empty();
     }
 

@@ -1,20 +1,23 @@
 package pl.adambalski.springbootboilerplate.repository;
 
+import org.springframework.stereotype.Repository;
 import pl.adambalski.springbootboilerplate.model.User;
 
 import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Interface containing functions used to communicate with data source, for example database.<br><br>
+ * Mostly used in {@link pl.adambalski.springbootboilerplate.service.UserService}.<br><br>
  *
  * @author Adam Balski
+ * @see pl.adambalski.springbootboilerplate.service.UserService
  */
 @SuppressWarnings("SameReturnValue")
+@Repository
 public interface UserRepository {
     // Get by
-    Optional<User> getByUUID(UUID uuid);
-    Optional<User> getByLogin(String login);
+    Optional<User> getUserByUUID(UUID uuid);
+    Optional<User> getUserByLogin(String login);
 
     // Exists by
     boolean existsByLoginOrEmail(String login, String email);
@@ -23,9 +26,5 @@ public interface UserRepository {
 
     // Add, delete
     boolean addUser(User user);
-    boolean deleteUser(String login);
-
-    // Ban, unban
-    boolean banEmail(String email);
-    boolean unbanEmail(String email);
+    boolean deleteUserByLogin(String login);
 }

@@ -6,16 +6,15 @@ import pl.adambalski.springbootboilerplate.model.User;
 import java.util.Optional;
 import java.util.UUID;
 
-// TODO link AdminService
 /**
- * Mostly used in AdminService.<br><br>
+ * Mostly used in {@link pl.adambalski.springbootboilerplate.service.AdminService}.<br><br>
  *
  * @author Adam Balski
- * @see //AdminService
+ * @see pl.adambalski.springbootboilerplate.service.AdminService
  */
 @Repository
 public interface AdminRepository {
-    Optional<User> getUserDataByUUID(UUID uuid);
-    Optional<User> getUserDataByLogin(String login);
+    Optional<User> getUserByUUID(UUID uuid);
+    Optional<User> getUserByLogin(String login);
     boolean deleteUserByLogin(String login);
 }

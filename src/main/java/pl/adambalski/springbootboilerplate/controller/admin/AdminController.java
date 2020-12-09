@@ -16,28 +16,28 @@ import java.util.UUID;
  */
 @RestController
 public class AdminController {
-    private AdminService adminService;
+    private final AdminService adminService;
 
     @Autowired
-    private void setAdminService(AdminService adminService) {
+    AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
     @GetMapping(value = "/api/admin/get-user-by-uuid")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
-    public User getUserDataByUUID(@RequestParam UUID uuid) {
-        return adminService.getUserDataByUUID(uuid);
+    public User getUserByUUID(@RequestParam UUID uuid) {
+        return adminService.getUserByUUID(uuid);
     }
 
     @GetMapping(value = "/api/admin/get-user-by-login")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
-    public User getUserDataByLogin(@RequestParam String login) {
-        return adminService.getUserDataByLogin(login);
+    public User getUserByLogin(@RequestParam String login) {
+        return adminService.getUserByLogin(login);
     }
 
     @DeleteMapping(value = "/api/admin/delete-user")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
-    public void deleteUser(@RequestBody String login) {
+    public void deleteUserByLogin(@RequestBody String login) {
         adminService.deleteUserByLogin(login);
     }
 }

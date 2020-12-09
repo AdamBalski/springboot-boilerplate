@@ -1,23 +1,26 @@
 package pl.adambalski.springbootboilerplate.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
+import pl.adambalski.springbootboilerplate.exception.AtLeastOneFieldIncorrectException;
+import pl.adambalski.springbootboilerplate.exception.EmailIsTakenException;
+import pl.adambalski.springbootboilerplate.exception.LoginIsTakenException;
+import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
 import pl.adambalski.springbootboilerplate.validation.SignUpUserDtoValidationResult;
 import pl.adambalski.springbootboilerplate.validation.SignUpUserDtoValidator;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Performs main logic of operations like registering, authentication and deletion of an account.<br><br>
  *
  * @author Adam Balski
+ * @see UserRepository
+ * @see pl.adambalski.springbootboilerplate.controller.user.UserController
  */
 @Service
 public class UserService {
@@ -30,53 +33,51 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean deleteUser(String login) {
-        return userRepository.deleteUser(login);
+    public boolean deleteUserByLogin(String login) {
+        return userRepository.deleteUserByLogin(login);
     }
 
-    public Optional<User> getUserByLogin(String login) {
-        return userRepository.getByLogin(login);
+    public User getUserByLogin(String login) {
+        return userRepository.getUserByLogin(login).orElseThrow(NoSuchUserException::new);
     }
 
-    public Optional<User> getUserByUUID(UUID uuid) {
-        return userRepository.getByUUID(uuid);
+    public User getUserByUUID(UUID uuid) {
+        return userRepository.getUserByUUID(uuid).orElseThrow(NoSuchUserException::new);
     }
 
-    public boolean addSignUpUserDto(SignUpUserDto dto) {
+    public void addSignUpUserDto(SignUpUserDto dto) {
         // Throws HTTP400 if not valid
         checkIfValid(dto);
-        // Throws HTTP400 if taken
+        // Throws HTTP400 if a field is taken
         checkIfTaken(dto);
 
         // Add
         User user = User.valueOf(dto, passwordEncoder);
-        return addUser(user);
+        addUser(user);
     }
 
     // Throws HTTP400 (with a reason) if not valid
     private void checkIfValid(SignUpUserDto dto) {
         SignUpUserDtoValidationResult validationResult = SignUpUserDtoValidator.validate(dto);
         if(!validationResult.isSuccess()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "SOME_FIELD_IS_INCORRECT");
+            throw new AtLeastOneFieldIncorrectException();
         }
     }
 
     // Throws HTTP400 (with a field taken) if taken
+    //todo reason
     private void checkIfTaken(SignUpUserDto dto) {
         if(userRepository.existsByLoginOrEmail(dto.login(), dto.email())) {
-            String reason;
             if(userRepository.existsByLogin(dto.login())) {
-                reason = "LOGIN_IS_TAKEN";
+                throw new LoginIsTakenException();
             }
             else {
-                reason = "EMAIL_IS_TAKEN";
+                throw new EmailIsTakenException();
             }
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, reason);
         }
     }
 
-    public boolean addUser(User user) {
-        return userRepository.addUser(user);
+    private void addUser(User user) {
+        userRepository.addUser(user);
     }
 }

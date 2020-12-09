@@ -40,12 +40,12 @@ public class AdminServiceTest {
     @Test
     void testGetUserDataByUuidWhenThereIsNoSuchUser() {
         UUID uuid = UUID.randomUUID();
-        Mockito.when(adminRepository.getUserDataByUUID(uuid)).thenReturn(Optional.empty());
+        Mockito.when(adminRepository.getUserByUUID(uuid)).thenReturn(Optional.empty());
 
-        Executable executable = () -> adminService.getUserDataByUUID(uuid);
+        Executable executable = () -> adminService.getUserByUUID(uuid);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).getUserDataByUUID(uuid);
+        Mockito.verify(adminRepository).getUserByUUID(uuid);
     }
 
     @Test
@@ -53,23 +53,23 @@ public class AdminServiceTest {
         User expectedUser = getRandUser();
         Optional<User> optionalUser = Optional.of(expectedUser);
         UUID  uuid= UUID.randomUUID();
-        Mockito.when(adminRepository.getUserDataByUUID(uuid)).thenReturn(optionalUser);
+        Mockito.when(adminRepository.getUserByUUID(uuid)).thenReturn(optionalUser);
 
-        User actualUser = adminService.getUserDataByUUID(uuid);
+        User actualUser = adminService.getUserByUUID(uuid);
         assertEquals(expectedUser, actualUser);
 
-        Mockito.verify(adminRepository).getUserDataByUUID(uuid);
+        Mockito.verify(adminRepository).getUserByUUID(uuid);
     }
 
     @Test
     void testGetUserDataByLoginWhenThereIsNoSuchUser() {
         String login = "login";
-        Mockito.when(adminRepository.getUserDataByLogin(login)).thenReturn(Optional.empty());
+        Mockito.when(adminRepository.getUserByLogin(login)).thenReturn(Optional.empty());
 
-        Executable executable = () -> adminService.getUserDataByLogin(login);
+        Executable executable = () -> adminService.getUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).getUserDataByLogin(login);
+        Mockito.verify(adminRepository).getUserByLogin(login);
     }
 
     @Test
@@ -77,12 +77,12 @@ public class AdminServiceTest {
         User expectedUser = getRandUser();
         Optional<User> optionalUser = Optional.of(expectedUser);
         String login = "login";
-        Mockito.when(adminRepository.getUserDataByLogin(login)).thenReturn(optionalUser);
+        Mockito.when(adminRepository.getUserByLogin(login)).thenReturn(optionalUser);
 
-        User actualUser = adminService.getUserDataByLogin(login);
+        User actualUser = adminService.getUserByLogin(login);
         assertEquals(expectedUser, actualUser);
 
-        Mockito.verify(adminRepository).getUserDataByLogin(login);
+        Mockito.verify(adminRepository).getUserByLogin(login);
     }
 
     @Test

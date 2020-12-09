@@ -14,23 +14,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author Adam Balski
  */
 @Configuration
-public class MvnConfigurerAdapter implements WebMvcConfigurer {
+public class WebMvcConfigurerImpl implements WebMvcConfigurer {
     private String origins;
     private long maxAge;
     private String[] allowedMethods;
 
     @Autowired
-    private void setAllowedMethods(@Value(value = "${app.security.allowed_methods}") String[] allowedMethods) {
+    private void setAllowedMethods(@Value(value = "${app.security.cors.allowed_methods}") String[] allowedMethods) {
         this.allowedMethods = allowedMethods;
     }
 
     @Autowired
-    private void setOrigins(@Value(value = "${app.security.origins}") String origins) {
+    private void setOrigins(@Value(value = "${app.security.cors.origins}") String origins) {
         this.origins = origins;
     }
 
     @Autowired
-    private void setMaxAge(@Value(value = "${app.security.max_age}") long maxAge) {
+    private void setMaxAge(@Value(value = "${app.security.cors.max_age}") long maxAge) {
         this.maxAge = maxAge;
     }
 

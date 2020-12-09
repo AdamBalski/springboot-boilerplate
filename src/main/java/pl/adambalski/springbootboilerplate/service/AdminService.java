@@ -13,27 +13,29 @@ import java.util.UUID;
  * Performs main logic of operations like getting data from a user account or deleting a user account.<br><br>
  *
  * @author Adam Balski
+ * @see AdminRepository
+ * @see pl.adambalski.springbootboilerplate.controller.admin.AdminController
  */
 @Service
 public class AdminService {
-    private AdminRepository adminRepository;
+    private final AdminRepository adminRepository;
 
     @Autowired
-    private void setUserRepository(AdminRepository adminRepository) {
+    AdminService(AdminRepository adminRepository) {
         this.adminRepository = adminRepository;
     }
 
-    public User getUserDataByUUID(UUID uuid) {
-        Optional<User> optionalUser = adminRepository.getUserDataByUUID(uuid);
+    public User getUserByUUID(UUID uuid) throws NoSuchUserException {
+        Optional<User> optionalUser = adminRepository.getUserByUUID(uuid);
         return optionalUser.orElseThrow(NoSuchUserException::new);
     }
 
-    public User getUserDataByLogin(String login) {
-        Optional<User> optionalUser = adminRepository.getUserDataByLogin(login);
+    public User getUserByLogin(String login) throws NoSuchUserException {
+        Optional<User> optionalUser = adminRepository.getUserByLogin(login);
         return optionalUser.orElseThrow(NoSuchUserException::new);
     }
 
-    public void deleteUserByLogin(String login) {
+    public void deleteUserByLogin(String login) throws NoSuchUserException {
         if(!adminRepository.deleteUserByLogin(login)) {
             throw new NoSuchUserException();
         }

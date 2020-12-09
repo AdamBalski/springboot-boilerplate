@@ -41,11 +41,11 @@ class AdminControllerTest {
         User user = getRandUser();
         UUID uuid = UUID.randomUUID();
 
-        Mockito.when(adminService.getUserDataByUUID(uuid)).thenReturn(user);
+        Mockito.when(adminService.getUserByUUID(uuid)).thenReturn(user);
 
-        assertEquals(user, adminController.getUserDataByUUID(uuid));
+        assertEquals(user, adminController.getUserByUUID(uuid));
 
-        Mockito.verify(adminService).getUserDataByUUID(uuid);
+        Mockito.verify(adminService).getUserByUUID(uuid);
     }
 
     @Test
@@ -53,12 +53,12 @@ class AdminControllerTest {
         NoSuchUserException noSuchUserException = new NoSuchUserException();
         UUID uuid = UUID.randomUUID();
 
-        Mockito.when(adminService.getUserDataByUUID(uuid)).thenThrow(noSuchUserException);
+        Mockito.when(adminService.getUserByUUID(uuid)).thenThrow(noSuchUserException);
 
-        Executable executable = () -> adminController.getUserDataByUUID(uuid);
+        Executable executable = () -> adminController.getUserByUUID(uuid);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminService).getUserDataByUUID(uuid);
+        Mockito.verify(adminService).getUserByUUID(uuid);
     }
 
     @Test
@@ -66,11 +66,11 @@ class AdminControllerTest {
         User user = getRandUser();
         String login = "login";
 
-        Mockito.when(adminService.getUserDataByLogin(login)).thenReturn(user);
+        Mockito.when(adminService.getUserByLogin(login)).thenReturn(user);
 
-        assertEquals(user, adminController.getUserDataByLogin(login));
+        assertEquals(user, adminController.getUserByLogin(login));
 
-        Mockito.verify(adminService).getUserDataByLogin(login);
+        Mockito.verify(adminService).getUserByLogin(login);
     }
 
     @Test
@@ -78,12 +78,12 @@ class AdminControllerTest {
         NoSuchUserException noSuchUserException = new NoSuchUserException();
         String login = "login";
 
-        Mockito.when(adminService.getUserDataByLogin(login)).thenThrow(noSuchUserException);
+        Mockito.when(adminService.getUserByLogin(login)).thenThrow(noSuchUserException);
 
-        Executable executable = () -> adminController.getUserDataByLogin(login);
+        Executable executable = () -> adminController.getUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminService).getUserDataByLogin(login);
+        Mockito.verify(adminService).getUserByLogin(login);
     }
 
     @Test
@@ -91,7 +91,7 @@ class AdminControllerTest {
         User user = getRandUser();
         String login = "login";
 
-        Executable executable = () -> adminController.deleteUser(login);
+        Executable executable = () -> adminController.deleteUserByLogin(login);
         assertDoesNotThrow(executable);
 
         Mockito.verify(adminService).deleteUserByLogin(login);
@@ -105,7 +105,7 @@ class AdminControllerTest {
 
         Mockito.doThrow(noSuchUserException).when(adminService).deleteUserByLogin(login);
 
-        Executable executable = () -> adminController.deleteUser(login);
+        Executable executable = () -> adminController.deleteUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
         Mockito.verify(adminService).deleteUserByLogin(login);

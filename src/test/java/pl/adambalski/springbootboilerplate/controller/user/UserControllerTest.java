@@ -18,7 +18,6 @@ import pl.adambalski.springbootboilerplate.model.Role;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.service.UserService;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,8 +65,7 @@ class UserControllerTest {
 
     @Test
     void testGetOwnData() {
-        Optional<User> userOptional = Optional.of(this.user);
-        Mockito.when(userService.getUserByLogin(login)).thenReturn(userOptional);
+        Mockito.when(userService.getUserByLogin(login)).thenReturn(user);
 
         assertEquals(this.user, userController.getOwnData());
         Mockito.verify(userService).getUserByLogin(login);
@@ -76,7 +74,7 @@ class UserControllerTest {
     @Test
     void testDeleteLoggedUser() {
         userController.deleteLoggedUser();
-        Mockito.verify(userService).deleteUser(login);
+        Mockito.verify(userService).deleteUserByLogin(login);
     }
 
     @Test
@@ -102,7 +100,7 @@ class UserControllerTest {
                 "password");
 
         ResponseStatusException exception = new ResponseStatusException(HttpStatus.BAD_REQUEST, "LOGIN_IS_INCORRECT");
-        Mockito.when(userService.addSignUpUserDto(signUpUserDto)).thenThrow(exception);
+        Mockito.doThrow(exception).when(userService).addSignUpUserDto(signUpUserDto);
 
         Executable executable = () -> userController.signUp(signUpUserDto);
         assertThrows(ResponseStatusException.class, executable);
