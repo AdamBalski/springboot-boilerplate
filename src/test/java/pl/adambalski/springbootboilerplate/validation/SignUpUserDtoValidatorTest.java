@@ -29,6 +29,13 @@ class SignUpUserDtoValidatorTest {
                         "password",
                         "password"
                 ),
+                new SignUpUserDto( // Login is too long
+                        "useruseruseruseruseruseruseruseruseruseruseruseruser",
+                        "User Name",
+                        "user@name.jpg",
+                        "password",
+                        "password"
+                ),
                 new SignUpUserDto( // Login contains a forbidden chars ('?')
                         "username?",
                         "User Name",
@@ -45,6 +52,13 @@ class SignUpUserDtoValidatorTest {
                 ),
                 new SignUpUserDto( // Full name is empty
                         "username",
+                        "",
+                        "user@name.jpg",
+                        "password",
+                        "password"
+                ),
+                new SignUpUserDto( // Full name is too long
+                        "usernameusernameusernameusernameusernameusernameusernameusernameusernameusernameusername",
                         "",
                         "user@name.jpg",
                         "password",
@@ -77,6 +91,13 @@ class SignUpUserDtoValidatorTest {
                         "user@name.jpg",
                         "password1",
                         "password2"
+                ),
+                new SignUpUserDto( // Email is too long
+                        "username",
+                        "User Name",
+                        "user@name.jpg".repeat(100),
+                        "password",
+                        "password"
                 ));
     }
 
@@ -99,7 +120,7 @@ class SignUpUserDtoValidatorTest {
     }
 
     @Test
-    void testIfLoginContainsForbiddenChars() {
+    void testIfTooLongLogin() {
         SignUpUserDto userDto = dtos.get(1);
 
         Assertions.assertEquals(
@@ -109,17 +130,17 @@ class SignUpUserDtoValidatorTest {
     }
 
     @Test
-    void testIfFullNameNotCapital() {
+    void testIfLoginContainsForbiddenChars() {
         SignUpUserDto userDto = dtos.get(2);
 
         Assertions.assertEquals(
-                SignUpUserDtoValidationResult.FULL_NAME_NOT_CORRECT,
+                SignUpUserDtoValidationResult.LOGIN_NOT_CORRECT,
                 SignUpUserDtoValidator.validate(userDto)
         );
     }
 
     @Test
-    void testIfEmptyFullName() {
+    void testIfFullNameNotCapital() {
         SignUpUserDto userDto = dtos.get(3);
 
         Assertions.assertEquals(
@@ -129,7 +150,7 @@ class SignUpUserDtoValidatorTest {
     }
 
     @Test
-    void testIfFullNameContainsForbiddenChar() {
+    void testIfEmptyFullName() {
         SignUpUserDto userDto = dtos.get(4);
 
         Assertions.assertEquals(
@@ -139,8 +160,28 @@ class SignUpUserDtoValidatorTest {
     }
 
     @Test
-    void testIfShortPassword() {
+    void testIfTooLongFullName() {
         SignUpUserDto userDto = dtos.get(5);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.FULL_NAME_NOT_CORRECT,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfFullNameContainsForbiddenChar() {
+        SignUpUserDto userDto = dtos.get(6);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.FULL_NAME_NOT_CORRECT,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfShortPassword() {
+        SignUpUserDto userDto = dtos.get(7);
 
         Assertions.assertEquals(
                 SignUpUserDtoValidationResult.PASSWORD_NOT_CORRECT,
@@ -150,7 +191,7 @@ class SignUpUserDtoValidatorTest {
 
     @Test
     void testIfPasswordContainsForbiddenChar() {
-        SignUpUserDto userDto = dtos.get(6);
+        SignUpUserDto userDto = dtos.get(8);
 
         Assertions.assertEquals(
                 SignUpUserDtoValidationResult.PASSWORD_NOT_CORRECT,
@@ -160,12 +201,23 @@ class SignUpUserDtoValidatorTest {
 
     @Test
     void testIfPasswordsAreDifferent() {
-        SignUpUserDto userDto = dtos.get(7);
+        SignUpUserDto userDto = dtos.get(9);
 
         Assertions.assertEquals(
                 SignUpUserDtoValidationResult.PASSWORDS_DIFFERENT,
                 SignUpUserDtoValidator.validate(userDto)
         );
     }
+
+    @Test
+    void testIfTooLongEmail() {
+        SignUpUserDto userDto = dtos.get(10);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.EMAIL_NOT_CORRECT,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
 
 }

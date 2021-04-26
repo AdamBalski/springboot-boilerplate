@@ -13,6 +13,7 @@ import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 public enum SignUpUserDtoValidationResult implements ValidationResult {
     LOGIN_NOT_CORRECT,
     FULL_NAME_NOT_CORRECT,
+    EMAIL_NOT_CORRECT,
     PASSWORD_NOT_CORRECT,
     PASSWORDS_DIFFERENT,
     SUCCESS;
