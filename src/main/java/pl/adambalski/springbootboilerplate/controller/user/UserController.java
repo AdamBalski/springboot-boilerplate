@@ -15,7 +15,6 @@ import pl.adambalski.springbootboilerplate.service.UserService;
  * @see RestController
  * @author Adam Balski
  */
-// TODO test
 @RestController
 public class UserController {
     private final UserService userService;

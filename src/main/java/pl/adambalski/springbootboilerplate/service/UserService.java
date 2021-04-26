@@ -65,7 +65,6 @@ public class UserService {
     }
 
     // Throws HTTP400 (with a field taken) if taken
-    //todo reason
     private void checkIfTaken(SignUpUserDto dto) {
         if(userRepository.existsByLoginOrEmail(dto.login(), dto.email())) {
             if(userRepository.existsByLogin(dto.login())) {

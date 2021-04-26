@@ -27,11 +27,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 @WebMvcTest
 public class AuthenticateEndpointTest {
-    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     MockMvc mvc;
 
-    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     ApplicationContext applicationContext;
 
@@ -135,16 +133,12 @@ public class AuthenticateEndpointTest {
         testByRequestBody(requestBody, MockMvcResultMatchers.status().is(400));
     }
 
-    private static class MockUserDetailsService implements UserDetailsService {
-        private final UserDetails userDetails;
-
-        public MockUserDetailsService(UserDetails userDetails) {
-            this.userDetails = userDetails;
-        }
+    private static record MockUserDetailsService(
+            UserDetails userDetails) implements UserDetailsService {
 
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-            if("username".equals(username)) {
+            if ("username".equals(username)) {
                 return userDetails;
             }
             throw new UsernameNotFoundException("UsernameNotFoundException");

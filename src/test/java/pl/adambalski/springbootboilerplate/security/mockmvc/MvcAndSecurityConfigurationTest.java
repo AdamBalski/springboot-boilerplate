@@ -30,11 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 public class MvcAndSecurityConfigurationTest {
-    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     private MockMvc mvc;
 
-    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -162,6 +160,7 @@ public class MvcAndSecurityConfigurationTest {
     }
 }
 
+@SuppressWarnings("unused")
 @RestController
 class MockController {
     @PreAuthorize(value = "permitAll()")
