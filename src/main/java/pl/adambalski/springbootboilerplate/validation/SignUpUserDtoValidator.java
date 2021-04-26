@@ -35,9 +35,9 @@ import java.util.regex.Pattern;
  * @author Adam Balski
  */
 public class SignUpUserDtoValidator {
-    private static final Pattern loginPattern = Pattern.compile("[a-zA-Z0-9-+!@#$%^&*()]{5,30}"); // test
-    private static final Pattern namePattern = Pattern.compile("[A-Z][a-z]{1,50}"); //
-    private static final Pattern emailPattern = Pattern.compile(".{0,320}"); //
+    private static final Pattern loginPattern = Pattern.compile("[a-zA-Z0-9-+!@#$%^&*()]{5,30}");
+    private static final Pattern namePattern = Pattern.compile("[A-Z][a-z]*"); // this is a pattern for each name in names
+    private static final Pattern emailPattern = Pattern.compile(".{0,320}");
     private static final Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9-+!@#$%^&*()]{8,}");
 
     public static SignUpUserDtoValidationResult validate(SignUpUserDto signUpUserDto) {
@@ -57,8 +57,8 @@ public class SignUpUserDtoValidator {
             signUpUserDto -> {
                 String fullName = signUpUserDto.fullName();
 
-                // Check if empty
-                if(fullName.length() == 0) {
+                // Check for length
+                if(fullName.length() == 0 || fullName.length() > 50) {
                     return SignUpUserDtoValidationResult.FULL_NAME_NOT_CORRECT;
                 }
 

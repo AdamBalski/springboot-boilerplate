@@ -3,7 +3,6 @@ package pl.adambalski.springbootboilerplate.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -44,7 +43,7 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
 
         registry.addMapping("/api/user/authenticate")
                 .allowCredentials(true)
-                .allowedMethods(HttpMethod.POST.name())
+                .allowedMethods("POST")
                 .allowedOrigins(origins)
                 .maxAge(maxAge);
     }

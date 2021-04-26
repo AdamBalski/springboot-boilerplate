@@ -58,8 +58,8 @@ class SignUpUserDtoValidatorTest {
                         "password"
                 ),
                 new SignUpUserDto( // Full name is too long
-                        "usernameusernameusernameusernameusernameusernameusernameusernameusernameusernameusername",
-                        "",
+                        "username",
+                        "Full Name Full Name Full Name Full Name Full Name Full Name Full Name Full Name",
                         "user@name.jpg",
                         "password",
                         "password"
@@ -162,6 +162,9 @@ class SignUpUserDtoValidatorTest {
     @Test
     void testIfTooLongFullName() {
         SignUpUserDto userDto = dtos.get(5);
+
+        System.out.println(userDto.fullName());
+        System.out.println(userDto.fullName().length());
 
         Assertions.assertEquals(
                 SignUpUserDtoValidationResult.FULL_NAME_NOT_CORRECT,
