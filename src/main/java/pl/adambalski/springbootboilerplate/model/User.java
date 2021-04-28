@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -17,13 +18,32 @@ import java.util.UUID;
  * @see Role
  * @author Adam Balski
  */
+@Entity
+@Table(name = "user", schema = "public")
 public class User {
-    private UUID uuid;
+    @Id
+    @Column(nullable = false, columnDefinition = "uuid", unique = true, updatable = false)
+    private UUID uuid = UUID.randomUUID();
+
+    @Column(nullable = false, columnDefinition = "varchar(30)", unique = true)
     private String login;
+
+    @Column(name = "full_name", nullable = false, columnDefinition = "varchar(50)", unique = true)
     private String fullName;
+
+    @Column(nullable = false, columnDefinition = "varchar(320)", unique = true)
     private String email;
+
+    @Column(nullable = false, columnDefinition = "text", unique = true)
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "varchar(30)", unique = true)
     private Role role;
+
+    public User() {
+
+    }
 
     public User(UUID uuid, String login, String fullName, String email, String password, Role role) {
         this.uuid = uuid;
