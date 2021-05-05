@@ -88,7 +88,6 @@ class AdminControllerTest {
 
     @Test
     void testDeleteUserWhenThereIsSuchUser() {
-        User user = getRandUser();
         String login = "login";
 
         Executable executable = () -> adminController.deleteUserByLogin(login);
@@ -100,7 +99,6 @@ class AdminControllerTest {
     @Test
     void testDeleteUserWhenThereIsNoSuchUser() {
         NoSuchUserException noSuchUserException = new NoSuchUserException();
-        User user = getRandUser();
         String login = "login";
 
         Mockito.doThrow(noSuchUserException).when(adminService).deleteUserByLogin(login);

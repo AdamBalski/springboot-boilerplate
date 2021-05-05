@@ -11,7 +11,7 @@ import org.mockito.MockitoAnnotations;
 import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.Role;
 import pl.adambalski.springbootboilerplate.model.User;
-import pl.adambalski.springbootboilerplate.repository.AdminRepository;
+import pl.adambalski.springbootboilerplate.repository.AdminJpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +25,7 @@ public class AdminServiceTest {
     AdminService adminService;
 
     @Mock
-    AdminRepository adminRepository;
+    AdminJpaRepository adminJpaRepository;
 
     @BeforeEach
     void init() {
@@ -40,12 +40,12 @@ public class AdminServiceTest {
     @Test
     void testGetUserDataByUuidWhenThereIsNoSuchUser() {
         UUID uuid = UUID.randomUUID();
-        Mockito.when(adminRepository.getUserByUUID(uuid)).thenReturn(Optional.empty());
+        Mockito.when(adminJpaRepository.findByUuid(uuid)).thenReturn(Optional.empty());
 
         Executable executable = () -> adminService.getUserByUUID(uuid);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).getUserByUUID(uuid);
+        Mockito.verify(adminJpaRepository).findByUuid(uuid);
     }
 
     @Test
@@ -53,23 +53,23 @@ public class AdminServiceTest {
         User expectedUser = getRandUser();
         Optional<User> optionalUser = Optional.of(expectedUser);
         UUID  uuid= UUID.randomUUID();
-        Mockito.when(adminRepository.getUserByUUID(uuid)).thenReturn(optionalUser);
+        Mockito.when(adminJpaRepository.findByUuid(uuid)).thenReturn(optionalUser);
 
         User actualUser = adminService.getUserByUUID(uuid);
         assertEquals(expectedUser, actualUser);
 
-        Mockito.verify(adminRepository).getUserByUUID(uuid);
+        Mockito.verify(adminJpaRepository).findByUuid(uuid);
     }
 
     @Test
     void testGetUserDataByLoginWhenThereIsNoSuchUser() {
         String login = "login";
-        Mockito.when(adminRepository.getUserByLogin(login)).thenReturn(Optional.empty());
+        Mockito.when(adminJpaRepository.findByLogin(login)).thenReturn(Optional.empty());
 
         Executable executable = () -> adminService.getUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).getUserByLogin(login);
+        Mockito.verify(adminJpaRepository).findByLogin(login);
     }
 
     @Test
@@ -77,34 +77,34 @@ public class AdminServiceTest {
         User expectedUser = getRandUser();
         Optional<User> optionalUser = Optional.of(expectedUser);
         String login = "login";
-        Mockito.when(adminRepository.getUserByLogin(login)).thenReturn(optionalUser);
+        Mockito.when(adminJpaRepository.findByLogin(login)).thenReturn(optionalUser);
 
         User actualUser = adminService.getUserByLogin(login);
         assertEquals(expectedUser, actualUser);
 
-        Mockito.verify(adminRepository).getUserByLogin(login);
+        Mockito.verify(adminJpaRepository).findByLogin(login);
     }
 
     @Test
     void testDeleteUserByLoginSuccessfully() {
         String login = "login";
-        Mockito.when(adminRepository.deleteUserByLogin(login)).thenReturn(true);
+        Mockito.when(adminJpaRepository.deleteUserByLogin(login)).thenReturn(true);
 
         Executable executable = () -> adminService.deleteUserByLogin(login);
         assertDoesNotThrow(executable);
 
-        Mockito.verify(adminRepository).deleteUserByLogin(login);
+        Mockito.verify(adminJpaRepository).deleteUserByLogin(login);
     }
 
     @Test
     void testDeleteUserByLoginUnsuccessfully() {
         String login = "login";
-        Mockito.when(adminRepository.deleteUserByLogin(login)).thenReturn(false);
+        Mockito.when(adminJpaRepository.deleteUserByLogin(login)).thenReturn(false);
 
         Executable executable = () -> adminService.deleteUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).deleteUserByLogin(login);
+        Mockito.verify(adminJpaRepository).deleteUserByLogin(login);
     }
 
         private User getRandUser() {
