@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.adambalski.springbootboilerplate.controller.user.AuthenticationController;
+import pl.adambalski.springbootboilerplate.repository.AdminJpaRepository;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
@@ -32,6 +34,12 @@ public class AuthenticateEndpointTest {
 
     @Autowired
     ApplicationContext applicationContext;
+
+    // ApplicationContext wants an AdminJpaRepository bean,
+    // but jpa can't instantiate it with @WebMvcTest, so we
+    // have to create a mock bean.
+    @MockBean
+    AdminJpaRepository adminJpaRepository;
 
     JwtUtil jwtUtil;
 

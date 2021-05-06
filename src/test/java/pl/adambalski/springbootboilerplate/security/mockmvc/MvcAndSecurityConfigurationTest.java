@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.User;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.adambalski.springbootboilerplate.model.Role;
+import pl.adambalski.springbootboilerplate.repository.AdminJpaRepository;
 import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
@@ -28,6 +30,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
+
 @WebMvcTest
 public class MvcAndSecurityConfigurationTest {
     @Autowired
@@ -35,6 +38,12 @@ public class MvcAndSecurityConfigurationTest {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    // ApplicationContext wants an AdminJpaRepository bean,
+    // but jpa can't instantiate it with @WebMvcTest, so we
+    // have to create a mock bean.
+    @MockBean
+    private AdminJpaRepository adminJpaRepository;
 
     private JwtUtil jwtUtil;
 
@@ -57,8 +66,8 @@ public class MvcAndSecurityConfigurationTest {
                     .get(path);
 
             // if authenticated, then set jwt token
-            if(testBy != UserType.UNAUTHENTICATED) {
-                    request = request.header("authorization", getValidJwt(testBy));
+            if (testBy != UserType.UNAUTHENTICATED) {
+                request = request.header("authorization", getValidJwt(testBy));
             }
 
             mvc.perform(request)
@@ -78,13 +87,15 @@ public class MvcAndSecurityConfigurationTest {
     void testAccessibleByAllByUnauthenticated() {
         testByParameters("/mock/all", UserType.UNAUTHENTICATED, MockMvcResultMatchers.status().isOk(), "all");
     }
+
     @Test
     void testAccessibleByAllByUser() {
-        testByParameters("/mock/all" , UserType.USER, MockMvcResultMatchers.status().isOk(), "all");
+        testByParameters("/mock/all", UserType.USER, MockMvcResultMatchers.status().isOk(), "all");
     }
+
     @Test
     void testAccessibleByAllByAdmin() {
-        testByParameters("/mock/all" , UserType.ADMIN, MockMvcResultMatchers.status().isOk(), "all");
+        testByParameters("/mock/all", UserType.ADMIN, MockMvcResultMatchers.status().isOk(), "all");
     }
 
     // Accessible only by User (not by admin)
@@ -92,10 +103,12 @@ public class MvcAndSecurityConfigurationTest {
     void testAccessibleOnlyByUserByUnauthenticated() {
         testByParameters("/mock/user", UserType.UNAUTHENTICATED, MockMvcResultMatchers.status().isForbidden(), "");
     }
+
     @Test
     void testAccessibleOnlyByUserByUser() {
         testByParameters("/mock/user", UserType.USER, MockMvcResultMatchers.status().isOk(), "user");
     }
+
     @Test
     void testAccessibleOnlyByUserByAdmin() {
         testByParameters("/mock/user", UserType.ADMIN, MockMvcResultMatchers.status().isForbidden(), "");
@@ -106,10 +119,12 @@ public class MvcAndSecurityConfigurationTest {
     void testAccessibleByUserAndAdminByUnauthenticated() {
         testByParameters("/mock/user-and-admin", UserType.UNAUTHENTICATED, MockMvcResultMatchers.status().isForbidden(), "");
     }
+
     @Test
     void testAccessibleByUserAndAdminByUser() {
         testByParameters("/mock/user-and-admin", UserType.USER, MockMvcResultMatchers.status().isOk(), "user || admin");
     }
+
     @Test
     void testAccessibleByUserAndAdminByAdmin() {
         testByParameters("/mock/user-and-admin", UserType.ADMIN, MockMvcResultMatchers.status().isOk(), "user || admin");
@@ -120,10 +135,12 @@ public class MvcAndSecurityConfigurationTest {
     void testAccessibleByAdminByUnauthenticated() {
         testByParameters("/mock/admin", UserType.UNAUTHENTICATED, MockMvcResultMatchers.status().isForbidden(), "");
     }
+
     @Test
     void testAccessibleByAdminByUser() {
         testByParameters("/mock/admin", UserType.USER, MockMvcResultMatchers.status().isForbidden(), "");
     }
+
     @Test
     void testAccessibleByAdminByAdmin() {
         testByParameters("/mock/admin", UserType.ADMIN, MockMvcResultMatchers.status().isOk(), "admin");
@@ -143,8 +160,8 @@ public class MvcAndSecurityConfigurationTest {
 
         @Override
         public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-            if("USER".equals(s))    return user;
-            if("ADMIN".equals(s))   return admin;
+            if ("USER".equals(s)) return user;
+            if ("ADMIN".equals(s)) return admin;
 
             throw new UsernameNotFoundException("UsernameNotFoundException");
         }
