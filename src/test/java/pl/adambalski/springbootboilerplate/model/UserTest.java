@@ -185,6 +185,8 @@ class UserTest {
         User original = createUser();
 
         UUID newUUID = UUID.randomUUID();
+        assert !newUUID.equals(original.getUuid());
+
         User newUser = new User(
                 newUUID,
                 original.getLogin(),
@@ -203,6 +205,8 @@ class UserTest {
         User original = createUser();
 
         String newLogin = "newLogin";
+        assert !newLogin.equals(original.getLogin());
+
         User newUser = new User(
                 original.getUuid(),
                 newLogin,
@@ -221,6 +225,8 @@ class UserTest {
         User original = createUser();
 
         String newFullName = "New Full Name";
+        assert !newFullName.equals(original.getFullName());
+
         User newUser = new User(
                 original.getUuid(),
                 original.getLogin(),
@@ -239,6 +245,8 @@ class UserTest {
         User original = createUser();
 
         String newEmail = "new@email.com";
+        assert !newEmail.equals(original.getEmail());
+
         User newUser = new User(
                 original.getUuid(),
                 original.getLogin(),
@@ -256,7 +264,10 @@ class UserTest {
     void testSetPassword() {
         User original = createUser();
 
+
         String newPassword = "newPassword";
+        assert !newPassword.equals(original.getPassword());
+
         User newUser = new User(
                 original.getUuid(),
                 original.getLogin(),
@@ -274,7 +285,9 @@ class UserTest {
     void testSetRole() {
         User original = createUser();
 
-        Role newRole = Role.USER;
+        Role newRole = Role.ADMIN;
+        assert newRole != original.getRole();
+
         User newUser = new User(
                 original.getUuid(),
                 original.getLogin(),
@@ -288,14 +301,110 @@ class UserTest {
         assertEquals(original, newUser);
     }
 
+    @Test
+    void testGetUuid() {
+        UUID uuid = UUID.randomUUID();
+
+        User user = new User(
+                uuid,
+                "login",
+                "Full Name",
+                "a@a.a",
+                "password",
+                Role.ADMIN
+        );
+
+        assertEquals(uuid, user.getUuid());
+    }
+
+    @Test
+    void testGetLogin() {
+        String login = "login";
+
+        User user = new User(
+                UUID.randomUUID(),
+                login,
+                "Full Name",
+                "a@a.a",
+                "password",
+                Role.ADMIN
+        );
+
+        assertEquals(login, user.getLogin());
+    }
+
+    @Test
+    void testGetFullName() {
+        String fullName = "fullName";
+
+        User user = new User(
+                UUID.randomUUID(),
+                "login",
+                fullName,
+                "a@a.a",
+                "password",
+                Role.ADMIN
+        );
+
+        assertEquals(fullName, user.getFullName());
+    }
+
+    @Test
+    void testGetEmail() {
+        String email = "e@ma.il";
+
+        User user = new User(
+                UUID.randomUUID(),
+                "login",
+                "fullName",
+                email,
+                "password",
+                Role.ADMIN
+        );
+
+        assertEquals(email, user.getEmail());
+    }
+
+    @Test
+    void testGetPassword() {
+        String password = "password";
+
+        User user = new User(
+                UUID.randomUUID(),
+                "login",
+                "fullName",
+                "e@ma.il",
+                password,
+                Role.ADMIN
+        );
+
+        assertEquals(password, user.getPassword());
+    }
+
+    @Test
+    void testGetRole() {
+        Role role = Role.ADMIN;
+
+        User user = new User(
+                UUID.randomUUID(),
+                "login",
+                "fullName",
+                "e@ma.il",
+                "password",
+                role
+        );
+
+        assertEquals(role, user.getRole());
+    }
+
     private User createUser() {
         PasswordEncoder pe = new PasswordEncoderFactory().passwordEncoderBean();
         SignUpUserDto signUpUserDto = new SignUpUserDto(
                 "login",
                 "Full Name",
                 "png@jpg.svg",
-                "password1",
-                "passeord1"
+                "password",
+                "password"
         );
         return User.valueOf(signUpUserDto, pe);
     }
