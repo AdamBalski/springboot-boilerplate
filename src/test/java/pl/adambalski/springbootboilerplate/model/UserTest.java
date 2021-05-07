@@ -179,4 +179,124 @@ class UserTest {
                 users.get(0).getGrantedAuthorities()
         );
     }
+
+    @Test
+    void testSetUuid() {
+        User original = createUser();
+
+        UUID newUUID = UUID.randomUUID();
+        User newUser = new User(
+                newUUID,
+                original.getLogin(),
+                original.getFullName(),
+                original.getEmail(),
+                original.getPassword(),
+                original.getRole()
+        );
+
+        original.setUuid(newUUID);
+        assertEquals(original, newUser);
+    }
+
+    @Test
+    void testSetLogin() {
+        User original = createUser();
+
+        String newLogin = "newLogin";
+        User newUser = new User(
+                original.getUuid(),
+                newLogin,
+                original.getFullName(),
+                original.getEmail(),
+                original.getPassword(),
+                original.getRole()
+        );
+
+        original.setLogin(newLogin);
+        assertEquals(original, newUser);
+    }
+
+    @Test
+    void testSetFullName() {
+        User original = createUser();
+
+        String newFullName = "New Full Name";
+        User newUser = new User(
+                original.getUuid(),
+                original.getLogin(),
+                newFullName,
+                original.getEmail(),
+                original.getPassword(),
+                original.getRole()
+        );
+
+        original.setFullName(newFullName);
+        assertEquals(original, newUser);
+    }
+
+    @Test
+    void testSetEmail() {
+        User original = createUser();
+
+        String newEmail = "new@email.com";
+        User newUser = new User(
+                original.getUuid(),
+                original.getLogin(),
+                original.getFullName(),
+                newEmail,
+                original.getPassword(),
+                original.getRole()
+        );
+
+        original.setEmail(newEmail);
+        assertEquals(original, newUser);
+    }
+
+    @Test
+    void testSetPassword() {
+        User original = createUser();
+
+        String newPassword = "newPassword";
+        User newUser = new User(
+                original.getUuid(),
+                original.getLogin(),
+                original.getFullName(),
+                original.getEmail(),
+                newPassword,
+                original.getRole()
+        );
+
+        original.setPassword(newPassword);
+        assertEquals(original, newUser);
+    }
+
+    @Test
+    void testSetRole() {
+        User original = createUser();
+
+        Role newRole = Role.USER;
+        User newUser = new User(
+                original.getUuid(),
+                original.getLogin(),
+                original.getFullName(),
+                original.getEmail(),
+                original.getPassword(),
+                newRole
+        );
+
+        original.setRole(newRole);
+        assertEquals(original, newUser);
+    }
+
+    private User createUser() {
+        PasswordEncoder pe = new PasswordEncoderFactory().passwordEncoderBean();
+        SignUpUserDto signUpUserDto = new SignUpUserDto(
+                "login",
+                "Full Name",
+                "png@jpg.svg",
+                "password1",
+                "passeord1"
+        );
+        return User.valueOf(signUpUserDto, pe);
+    }
 }
