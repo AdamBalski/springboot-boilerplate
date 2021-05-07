@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Application's User class<br><br>
+ * Application's User class that represents either a usual user with normal privileges or an admin.<br><br>
  *
  * @see SignUpUserDto
  * @see Role
@@ -20,9 +20,9 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "user", schema = "public")
-public class User {
+public final class User {
     @Id
-    @Column(nullable = false, columnDefinition = "uuid", unique = true, updatable = false)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid", unique = true, updatable = false)
     private UUID uuid = UUID.randomUUID();
 
     @Column(nullable = false, columnDefinition = "varchar(30)", unique = true)

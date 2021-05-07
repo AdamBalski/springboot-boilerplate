@@ -17,7 +17,7 @@ import java.util.Base64;
 public class SpringbootBoilerplateApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(SpringbootBoilerplateApplication.class, args);
-        Logger logger = applicationContext.getBean(Logger.class);
+        Logger logger = applicationContext.getBean("slf4jLogger", Logger.class);
 
         logJwtKey(logger);
     }

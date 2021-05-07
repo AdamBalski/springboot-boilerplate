@@ -1,6 +1,8 @@
 package pl.adambalski.springbootboilerplate.logger;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 
 /**
  * Slf4j implementation of {@link Logger}<br><br>
@@ -8,6 +10,7 @@ import org.slf4j.LoggerFactory;
  * @see pl.adambalski.springbootboilerplate.logger.Logger
  * @author Adam Balski
  */
+@Component
 public class Slf4jLogger implements Logger {
     @SuppressWarnings("rawtypes")
     @Override
