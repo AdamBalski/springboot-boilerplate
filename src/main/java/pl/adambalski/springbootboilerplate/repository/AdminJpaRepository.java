@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Performs SQL queries on database and is called by {@link pl.adambalski.springbootboilerplate.service.AdminService}
+ * Performs SQL queries on database and is called by {@link pl.adambalski.springbootboilerplate.service.AdminService}.<br><br>
  *
  * @author Adam Balski
  * @see pl.adambalski.springbootboilerplate.service.AdminService

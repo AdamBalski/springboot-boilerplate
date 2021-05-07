@@ -9,7 +9,7 @@ import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import java.util.Base64;
 
 /**
- * Class that starts the project<br><br>
+ * Class that starts the server.<br><br>
  *
  * @author Adam Balski
  */

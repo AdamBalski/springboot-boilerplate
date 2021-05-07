@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
  * @see Role
  * @author Adam Balski
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class GrantedAuthorityImpl implements GrantedAuthority {
     private final Role role;
 

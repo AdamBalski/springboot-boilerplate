@@ -1,7 +1,8 @@
 package pl.adambalski.springbootboilerplate.validation;
 
 /**
- * Enums implementing this class are used in {@link Validator}<br><br>
+ * Implementations of a {@link Validator}, return a value from a corresponding implementation of
+ * {@link ValidationResult} enum.<br><br>
  *
  * @see Validator
  * @author Adam Balski

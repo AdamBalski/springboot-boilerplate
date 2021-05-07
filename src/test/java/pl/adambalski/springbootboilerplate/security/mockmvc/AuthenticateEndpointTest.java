@@ -141,8 +141,7 @@ public class AuthenticateEndpointTest {
         testByRequestBody(requestBody, MockMvcResultMatchers.status().is(400));
     }
 
-    private static record MockUserDetailsService(
-            UserDetails userDetails) implements UserDetailsService {
+    private static record MockUserDetailsService(UserDetails userDetails) implements UserDetailsService {
 
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

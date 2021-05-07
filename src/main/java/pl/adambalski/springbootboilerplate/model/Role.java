@@ -1,7 +1,7 @@
 package pl.adambalski.springbootboilerplate.model;
 
 /**
- * Role enum for {@link User}<br><br>
+ * Enum that indicates if a {@link User} has admin privileges.<br><br>
  *
  * @see User
  * @author Adam Balski

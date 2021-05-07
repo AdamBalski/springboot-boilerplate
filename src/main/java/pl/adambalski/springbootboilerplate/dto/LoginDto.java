@@ -3,7 +3,7 @@ package pl.adambalski.springbootboilerplate.dto;
 /**
  * Used to exchange data with an api consumer while logging in.<br><br>
  *
- * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController;
+ * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController
  * @author Adam Balski
  */
 

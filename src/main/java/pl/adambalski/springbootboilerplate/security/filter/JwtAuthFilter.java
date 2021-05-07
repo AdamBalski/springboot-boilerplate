@@ -20,12 +20,18 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 /**
- * Checks for SWT (signed json web token) and sets {@link SecurityContextHolder}.<br>
+ * Checks for SWT (signed json web token) and sets {@link SecurityContextHolder}.<br><br>
  * When "authorization" header is not set, it passes.<br>
  * When the header is set:
- *      * if the jwt is not valid and username is found then
- *      sets {@link SecurityContextHolder}'s context to a user that has the username,
- *      * otherwise clears {@link SecurityContextHolder}'s context;<br><br>
+ * <ul>
+ *     <li>
+ *         if the jwt is valid and username is found then
+ *         sets {@link SecurityContextHolder}'s context to a user that has the username,
+ *     </li>
+ *     <li>
+ *         otherwise clears {@link SecurityContextHolder}'s context;
+ *     </li>
+ * </ul>
  *
  * @see SecurityContextHolder
  * @see org.springframework.security.core.context.SecurityContext

@@ -7,4 +7,4 @@ package pl.adambalski.springbootboilerplate.dto;
  * @author Adam Balski
  */
 
-public record SignUpUserDto(String login, String fullName, String email, String password1, String password2) {}
+public final record SignUpUserDto(String login, String fullName, String email, String password1, String password2) {}

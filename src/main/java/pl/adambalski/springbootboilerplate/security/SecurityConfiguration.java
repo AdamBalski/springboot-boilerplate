@@ -12,9 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfigurationSource;
 import pl.adambalski.springbootboilerplate.security.filter.JwtAuthFilter;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 
@@ -22,7 +20,7 @@ import javax.crypto.SecretKey;
 import javax.servlet.Filter;
 
 /**
- * Security configuration for the boilerplate<br><br>
+ * Security configuration.
  *
  * @see WebSecurityConfigurerAdapter
  * @see Filter
@@ -36,14 +34,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     private UserDetailsService userDetailsService;
-    private JwtUtil jwtUtil;
-    private CsrfTokenRepository csrfTokenRepository;
-    private CorsConfigurationSource corsConfigurationSource;
+    private final JwtUtil jwtUtil;
 
     @Autowired
     public SecurityConfiguration() {
         this.jwtUtil = new JwtUtil(KEY);
-        this.csrfTokenRepository = new CookieCsrfTokenRepository();
     }
 
     @Autowired

@@ -3,10 +3,9 @@ package pl.adambalski.springbootboilerplate.dto;
 /**
  * Used to pass jwt token to an api consumer in AuthenticationController.<br><br>
  *
- * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController
  * @author Adam Balski
+ * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController
  */
-
 public class JwtTokenDto {
     private String token;
 
@@ -14,7 +13,10 @@ public class JwtTokenDto {
         this.token = token;
     }
 
-    public String getJwtToken() {
+    // This method is used when spring mvc tries to parse
+    // the JwtTokenDto to JSON
+    @SuppressWarnings("unused")
+    public String getToken() {
         return token;
     }
 

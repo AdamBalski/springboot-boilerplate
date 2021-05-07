@@ -2,7 +2,7 @@ package pl.adambalski.springbootboilerplate.validation;
 
 /**
  * Performs validation.
- * {@link #and(Validator)} method allows to stack different validators.<br><br>
+ * {@link #and(Validator)} method allows to chain different validators together.<br><br>
  *
  * @param <T> class to validate
  * @param <R> enum containing possible validation results (extends @link {@link ValidationResult})

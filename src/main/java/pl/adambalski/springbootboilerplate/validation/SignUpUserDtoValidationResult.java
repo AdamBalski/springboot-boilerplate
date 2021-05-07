@@ -3,7 +3,7 @@ package pl.adambalski.springbootboilerplate.validation;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 
 /**
- * Used as {@link SignUpUserDto} validation result<br><br>
+ * Enum contains result of validation of {@link SignUpUserDto}.<br><br>
  *
  * @see SignUpUserDto
  * @see SignUpUserDtoValidator

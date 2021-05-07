@@ -25,10 +25,13 @@ import static org.junit.jupiter.api.Assertions.*;
         includeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
-                        classes = {AdminJpaRepository.class}),
-                @ComponentScan.Filter(
-                        type = FilterType.ASSIGNABLE_TYPE,
-                        classes = {PasswordEncoderFactory.class})})
+                        classes = {
+                                PasswordEncoderFactory.class,
+                                AdminJpaRepository.class
+                        }
+                )
+        }
+)
 public class AdminJpaRepositoryTest {
     @Autowired
     AdminJpaRepository adminJpaRepository;

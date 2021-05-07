@@ -5,9 +5,12 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 /**
- * Logging interface<br><br>
+ * Logging interface.<br>
+ * There are two implementations in this package. One is {@link Slf4jLogger} and the other one is {@link StdoutLoggerImpl}<br><br>
  *
  * @see Status
+ * @see Slf4jLogger
+ * @see StdoutLoggerImpl
  * @author Adam Balski
  */
 @SuppressWarnings("rawtypes")
