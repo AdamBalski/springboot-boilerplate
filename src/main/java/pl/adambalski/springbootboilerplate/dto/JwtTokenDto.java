@@ -6,8 +6,9 @@ package pl.adambalski.springbootboilerplate.dto;
  * @author Adam Balski
  * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController
  */
+@SuppressWarnings("ClassCanBeRecord")
 public class JwtTokenDto {
-    private String token;
+    private final String token;
 
     public JwtTokenDto(String token) {
         this.token = token;

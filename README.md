@@ -1,17 +1,40 @@
-# Spring Boilerplate
-## Boilerplate code for springboot. It contains user management via rest api and connects to a postgresql database.
+# Spring Boot Boilerplate
+## Template for spring boot applications. It includes user management via a rest api and connects to a postgresql database and uses JWTs for auth.
 
 ### Prerequisites to run
-If you want to start the server alone then first you have to add in the `resources` directory a file called `application.properties`.
-Template for that file:
+If you want to start the application, then first you have to add a file called `application.properties` to `src/main/java/resources`.
+You can use the template below.
+#### Template for the file:
 ```
-app.security.origins = localhost
-app.security.max_age = 3600L
-app.security.allowed_methods = ['GET', 'POST']
+# CORS configuration
+app.security.cors.origins = localhost
+app.security.cors.max_age = 3600
+app.security.cors.allowed_methods = 'GET', 'POST'
+
+# Logging
+logging.file.path=logger
+logging.file.name=logger/logfile
+
+# JPA
+spring.datasource.url = $URL
+spring.datasource.username = $DB_USERNAME
+spring.datasource.password = $DB_PASSWORD
+spring.datasource.hostname = $DB_HOSTNAME
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQL10Dialect
+spring.jpa.properties.hibernate.hbm2ddl.auto = validate
 ```
 ---
-### Done with:
-* check pom.xml for maven dependencies
+
+### Done with: (for more info check `pom.xml`)
+* jdk 15 (with preview features turned on)
+* maven
+* spring boot
+* postgresql
+* jackson based jjwt
+* h2
+* mockito
+* junit
+* slf4j
 
 ### License
 

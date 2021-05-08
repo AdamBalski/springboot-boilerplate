@@ -1,3 +1,5 @@
+logger
+src/main/resources/application.properties
 *mvn*
 target/
 !.mvn/wrapper/maven-wrapper.jar

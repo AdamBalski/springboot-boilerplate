@@ -21,6 +21,7 @@ import pl.adambalski.springbootboilerplate.service.UserService;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 
 class UserControllerTest {
     AutoCloseable autoCloseable;
@@ -68,13 +69,13 @@ class UserControllerTest {
         Mockito.when(userService.getUserByLogin(login)).thenReturn(user);
 
         assertEquals(this.user, userController.getOwnData());
-        Mockito.verify(userService).getUserByLogin(login);
+        verify(userService).getUserByLogin(login);
     }
 
     @Test
     void testDeleteLoggedUser() {
         userController.deleteLoggedUser();
-        Mockito.verify(userService).deleteUserByLogin(login);
+        verify(userService).deleteUserByLogin(login);
     }
 
     @Test
@@ -88,6 +89,8 @@ class UserControllerTest {
 
         Executable executable = () -> userController.signUp(signUpUserDto);
         assertDoesNotThrow(executable);
+
+        verify(userService).addSignUpUserDto(signUpUserDto);
     }
 
     @Test
@@ -104,5 +107,7 @@ class UserControllerTest {
 
         Executable executable = () -> userController.signUp(signUpUserDto);
         assertThrows(ResponseStatusException.class, executable);
+
+        verify(userService).addSignUpUserDto(signUpUserDto);
     }
 }
