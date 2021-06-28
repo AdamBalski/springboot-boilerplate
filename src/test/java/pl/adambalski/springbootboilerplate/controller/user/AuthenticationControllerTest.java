@@ -1,4 +1,4 @@
-package pl.adambalski.springbootboilerplate.security.mockmvc;
+package pl.adambalski.springbootboilerplate.controller.user;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import pl.adambalski.springbootboilerplate.controller.user.AuthenticationController;
 import pl.adambalski.springbootboilerplate.repository.AdminJpaRepository;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
@@ -28,7 +27,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @WebMvcTest
-public class AuthenticateEndpointTest {
+public class AuthenticationControllerTest {
     @Autowired
     MockMvc mvc;
 
