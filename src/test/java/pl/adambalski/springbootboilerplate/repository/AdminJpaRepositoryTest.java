@@ -90,29 +90,6 @@ public class AdminJpaRepositoryTest {
     }
 
     @Test
-    void testBooleanDeleteUserByLoginWhenUserExists() {
-        String login = "login";
-        SignUpUserDto signUpUserDto = new SignUpUserDto(
-                login,
-                "Full Name",
-                "a@a.jpg",
-                "password",
-                "password");
-        User user = User.valueOf(signUpUserDto, passwordEncoder);
-        adminJpaRepository.save(user);
-
-        // assert that deletion was successful
-        assertTrue(adminJpaRepository.deleteUserByLogin(login));
-        // assert that user no longer exists
-        assertFalse(adminJpaRepository.existsById(user.getUuid()));
-    }
-
-    @Test
-    void testBooleanDeleteUserByLoginWhenUserDoesNotExist() {
-        assertFalse(adminJpaRepository.deleteUserByLogin("login"));
-    }
-
-    @Test
     void testIntDeleteByLoginWhenUserExists() {
         String login = "login";
         SignUpUserDto signUpUserDto = new SignUpUserDto(

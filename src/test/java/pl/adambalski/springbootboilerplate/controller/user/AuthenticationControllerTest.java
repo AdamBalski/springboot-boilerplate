@@ -35,7 +35,7 @@ public class AuthenticationControllerTest {
     ApplicationContext applicationContext;
 
     // ApplicationContext wants an AdminJpaRepository bean,
-    // but jpa can't instantiate it with @WebMvcTest, so we
+    // but springboot can't instantiate it with @WebMvcTest, so we
     // have to create a mock bean.
     @MockBean
     AdminJpaRepository adminJpaRepository;

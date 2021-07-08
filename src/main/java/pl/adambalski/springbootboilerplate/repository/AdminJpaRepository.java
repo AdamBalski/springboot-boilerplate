@@ -26,10 +26,4 @@ public interface AdminJpaRepository extends JpaRepository<User, UUID> {
 
     @Modifying
     int deleteByLogin(String login);
-
-    @Modifying
-    default boolean deleteUserByLogin(String login) {
-        return deleteByLogin(login) > 0;
-    }
-
 }
