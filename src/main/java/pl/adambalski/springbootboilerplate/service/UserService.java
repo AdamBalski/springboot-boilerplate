@@ -34,15 +34,15 @@ public class UserService {
     }
 
     public boolean deleteUserByLogin(String login) {
-        return userRepository.deleteUserByLogin(login);
+        return userRepository.deleteByLogin(login) == 1;
     }
 
     public User getUserByLogin(String login) {
-        return userRepository.getUserByLogin(login).orElseThrow(NoSuchUserException::new);
+        return userRepository.findByLogin(login).orElseThrow(NoSuchUserException::new);
     }
 
     public User getUserByUUID(UUID uuid) {
-        return userRepository.getUserByUUID(uuid).orElseThrow(NoSuchUserException::new);
+        return userRepository.findById(uuid).orElseThrow(NoSuchUserException::new);
     }
 
     public void addSignUpUserDto(SignUpUserDto dto) {
@@ -77,6 +77,6 @@ public class UserService {
     }
 
     private void addUser(User user) {
-        userRepository.addUser(user);
+        userRepository.save(user);
     }
 }

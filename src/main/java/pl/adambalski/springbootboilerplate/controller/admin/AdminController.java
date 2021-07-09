@@ -38,6 +38,6 @@ public class AdminController {
     @DeleteMapping(value = "/api/admin/delete-user")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
     public void deleteUserByLogin(@RequestBody String login) {
-        adminService.deleteUserByLogin(login);
+        adminService.deleteByLogin(login);
     }
 }

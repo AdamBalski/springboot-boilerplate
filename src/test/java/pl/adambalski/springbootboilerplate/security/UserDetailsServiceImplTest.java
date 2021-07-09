@@ -43,7 +43,7 @@ class UserDetailsServiceImplTest {
     void testLoadUserByUsername() {
         User user = new User(UUID.randomUUID(),
                 "login", null, null, "password", Role.ADMIN);
-        when(userRepository.getUserByLogin("login"))
+        when(userRepository.findByLogin("login"))
                 .thenReturn(Optional.of(user));
 
         UserDetails expected = user.toUserDetails();
@@ -52,7 +52,7 @@ class UserDetailsServiceImplTest {
 
     @Test
     void testLoadUserByUsernameWhenUsernameDoesNotExist() {
-        when(userRepository.getUserByLogin("login"))
+        when(userRepository.findByLogin("login"))
                 .thenReturn(Optional.empty());
 
         Executable executable = () -> userDetailsService.loadUserByUsername("login");

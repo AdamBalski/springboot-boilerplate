@@ -20,7 +20,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.adambalski.springbootboilerplate.model.Role;
-import pl.adambalski.springbootboilerplate.repository.AdminJpaRepository;
+import pl.adambalski.springbootboilerplate.repository.AdminRepository;
+import pl.adambalski.springbootboilerplate.repository.UserRepository;
 import pl.adambalski.springbootboilerplate.security.GrantedAuthorityImpl;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
@@ -39,11 +40,14 @@ public class MvcAndSecurityConfigurationTest {
     @Autowired
     private ApplicationContext applicationContext;
 
-    // ApplicationContext wants an AdminJpaRepository bean,
-    // but jpa can't instantiate it with @WebMvcTest, so we
-    // have to create a mock bean.
+    // ApplicationContext wants repositories (controllers -> services -> repositories),
+    // to inject to services, which are needed to be injected to controllers
+    // but springboot can't instantiate repositories with @WebMvcTest, so we
+    // have to create mock beans.
     @MockBean
-    private AdminJpaRepository adminJpaRepository;
+    private AdminRepository adminRepository;
+    @MockBean
+    private UserRepository userRepository;
 
     private JwtUtil jwtUtil;
 

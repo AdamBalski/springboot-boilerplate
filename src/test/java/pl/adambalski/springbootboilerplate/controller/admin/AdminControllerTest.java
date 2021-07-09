@@ -93,7 +93,7 @@ class AdminControllerTest {
         Executable executable = () -> adminController.deleteUserByLogin(login);
         assertDoesNotThrow(executable);
 
-        verify(adminService).deleteUserByLogin(login);
+        verify(adminService).deleteByLogin(login);
     }
 
     @Test
@@ -101,12 +101,12 @@ class AdminControllerTest {
         NoSuchUserException noSuchUserException = new NoSuchUserException();
         String login = "login";
 
-        doThrow(noSuchUserException).when(adminService).deleteUserByLogin(login);
+        doThrow(noSuchUserException).when(adminService).deleteByLogin(login);
 
         Executable executable = () -> adminController.deleteUserByLogin(login);
         assertThrows(NoSuchUserException.class, executable);
 
-        verify(adminService).deleteUserByLogin(login);
+        verify(adminService).deleteByLogin(login);
     }
 
     private User getRandUser() {

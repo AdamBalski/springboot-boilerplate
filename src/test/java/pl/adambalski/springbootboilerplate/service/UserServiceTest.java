@@ -58,7 +58,7 @@ class UserServiceTest {
         User user = getRandUser();
         Optional<User> userOptional = Optional.of(user);
 
-        when(userRepository.getUserByLogin(login))
+        when(userRepository.findByLogin(login))
                 .thenReturn(userOptional);
 
         assertEquals(user, userService.getUserByLogin(login));
@@ -68,7 +68,7 @@ class UserServiceTest {
     @Test
     void testGetUserDataByLoginWhenThatLoginDoesNotExist() {
         String login = "user";
-        when(userRepository.getUserByLogin(login))
+        when(userRepository.findByLogin(login))
                 .thenReturn(Optional.empty());
 
         Executable executable = () -> userService.getUserByLogin(login);
@@ -81,7 +81,7 @@ class UserServiceTest {
         User user = getRandUser();
         Optional<User> userOptional = Optional.of(user);
 
-        when(userRepository.getUserByUUID(uuid))
+        when(userRepository.findById(uuid))
                 .thenReturn(userOptional);
 
         assertEquals(user, userService.getUserByUUID(uuid));
@@ -90,7 +90,7 @@ class UserServiceTest {
     @Test
     void testGetUserDataByUUIDWhenThatUuidDoesNotExist() {
         UUID uuid = UUID.randomUUID();
-        when(userRepository.getUserByUUID(uuid))
+        when(userRepository.findById(uuid))
                 .thenReturn(Optional.empty());
 
         Executable executable = () -> userService.getUserByUUID(uuid);
@@ -106,17 +106,16 @@ class UserServiceTest {
             var exception = assertThrows(ResponseStatusException.class, executable);
             assertEquals(exceptionClassOughtToBeThrown, exception.getClass());
             // verify nothing was put into repository
-            Mockito.verify(userRepository, never()).addUser(any());
+            Mockito.verify(userRepository, never()).save(any());
         }
         else {
             assertDoesNotThrow(executable);
-            Mockito.verify(userRepository).addUser(any(User.class));
+            Mockito.verify(userRepository).save(any(User.class));
         }
     }
 
     @Test
     void testAddSignUpUserDtoWhenEverythingIsOk() {
-        Mockito.when(userRepository.addUser(any(User.class))).thenReturn(true);
         SignUpUserDto signUpUserDto = new SignUpUserDto(
                 "login",
                 "Full Name",
@@ -210,24 +209,24 @@ class UserServiceTest {
 
     @Test
     void testDeleteUser() {
-        when(userRepository.deleteUserByLogin("login"))
-                .thenReturn(true);
+        when(userRepository.deleteByLogin("login"))
+                .thenReturn(1);
 
         boolean actual = userService.deleteUserByLogin("login");
 
         assertTrue(actual);
-        verify(userRepository).deleteUserByLogin("login");
+        verify(userRepository).deleteByLogin("login");
     }
 
     @Test
     void testDeleteUserWithFailure() {
-        when(userRepository.deleteUserByLogin("login"))
-                .thenReturn(false);
+        when(userRepository.deleteByLogin("login"))
+                .thenReturn(0);
 
         boolean actual = userService.deleteUserByLogin("login");
 
         assertFalse(actual);
-        verify(userRepository).deleteUserByLogin("login");
+        verify(userRepository).deleteByLogin("login");
     }
 
     User getRandUser() {

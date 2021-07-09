@@ -28,7 +28,7 @@ public final class User {
     @Column(nullable = false, columnDefinition = "varchar(30)", unique = true)
     private String login;
 
-    @Column(name = "full_name", nullable = false, columnDefinition = "varchar(50)", unique = true)
+    @Column(name = "full_name", nullable = false, columnDefinition = "varchar(50)")
     private String fullName;
 
     @Column(nullable = false, columnDefinition = "varchar(320)", unique = true)
@@ -38,7 +38,7 @@ public final class User {
     private String password;
 
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, columnDefinition = "varchar(30)", unique = true)
+    @Column(nullable = false, columnDefinition = "varchar(30)")
     private Role role;
 
     public User() {

@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @Transactional(readOnly = true)
 @Repository
-public interface AdminJpaRepository extends JpaRepository<User, UUID> {
+public interface AdminRepository extends JpaRepository<User, UUID> {
     Optional<User> findByLogin(String login);
 
     Optional<User> findByUuid(UUID uuid);

@@ -1,6 +1,5 @@
 package pl.adambalski.springbootboilerplate.repository;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -27,21 +26,16 @@ import static org.junit.jupiter.api.Assertions.*;
                         type = FilterType.ASSIGNABLE_TYPE,
                         classes = {
                                 PasswordEncoderFactory.class,
-                                AdminJpaRepository.class
+                                AdminRepository.class
                         }
                 )
         }
 )
-public class AdminJpaRepositoryTest {
+public class AdminRepositoryTest {
     @Autowired
-    AdminJpaRepository adminJpaRepository;
+    AdminRepository adminRepository;
 
     PasswordEncoder passwordEncoder = new PasswordEncoderFactory().passwordEncoderBean();
-
-    @AfterEach
-    void destroy() {
-        adminJpaRepository.findAll().forEach(System.out::println);
-    }
 
     @Test
     void testFindByUUIDWhenUserExists() {
@@ -53,9 +47,9 @@ public class AdminJpaRepositoryTest {
                 "password");
         User user = User.valueOf(signUpUserDto, passwordEncoder);
         UUID uuid = user.getUuid();
-        adminJpaRepository.save(user);
+        adminRepository.save(user);
 
-        Optional<User> userOptional = adminJpaRepository.findByUuid(uuid);
+        Optional<User> userOptional = adminRepository.findByUuid(uuid);
 
         assertTrue(userOptional.isPresent());
         assertEquals(user, userOptional.get());
@@ -63,7 +57,7 @@ public class AdminJpaRepositoryTest {
 
     @Test
     void testFindByUUIDWhenUserDoesNotExist() {
-        assertTrue(adminJpaRepository.findByUuid(UUID.randomUUID()).isEmpty());
+        assertTrue(adminRepository.findByUuid(UUID.randomUUID()).isEmpty());
     }
 
     @Test
@@ -76,9 +70,9 @@ public class AdminJpaRepositoryTest {
                 "password",
                 "password");
         User user = User.valueOf(signUpUserDto, passwordEncoder);
-        adminJpaRepository.save(user);
+        adminRepository.save(user);
 
-        Optional<User> userOptional = adminJpaRepository.findByLogin(login);
+        Optional<User> userOptional = adminRepository.findByLogin(login);
 
         assertTrue(userOptional.isPresent());
         assertEquals(user, userOptional.get());
@@ -86,11 +80,11 @@ public class AdminJpaRepositoryTest {
 
     @Test
     void testFindByLoginWhenUserDoesNotExist() {
-        assertTrue(adminJpaRepository.findByLogin("login").isEmpty());
+        assertTrue(adminRepository.findByLogin("login").isEmpty());
     }
 
     @Test
-    void testIntDeleteByLoginWhenUserExists() {
+    void testDeleteByLoginWhenUserExists() {
         String login = "login";
         SignUpUserDto signUpUserDto = new SignUpUserDto(
                 login,
@@ -99,16 +93,16 @@ public class AdminJpaRepositoryTest {
                 "password",
                 "password");
         User user = User.valueOf(signUpUserDto, passwordEncoder);
-        adminJpaRepository.save(user);
+        adminRepository.save(user);
 
         // assert that deletion was successful
-        assertEquals(1, adminJpaRepository.deleteByLogin(login));
+        assertEquals(1, adminRepository.deleteByLogin(login));
         // assert that user no longer exists
-        assertFalse(adminJpaRepository.existsById(user.getUuid()));
+        assertFalse(adminRepository.existsById(user.getUuid()));
     }
 
     @Test
-    void testIntDeleteByLoginWhenUserDoesNotExist() {
-        assertEquals(0, adminJpaRepository.deleteByLogin("login"));
+    void testDeleteByLoginWhenUserDoesNotExist() {
+        assertEquals(0, adminRepository.deleteByLogin("login"));
     }
 }

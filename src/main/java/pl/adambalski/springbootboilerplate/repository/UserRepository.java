@@ -1,6 +1,9 @@
 package pl.adambalski.springbootboilerplate.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import pl.adambalski.springbootboilerplate.model.User;
 
 import java.util.Optional;
@@ -13,18 +16,18 @@ import java.util.UUID;
  * @see pl.adambalski.springbootboilerplate.service.UserService
  */
 @SuppressWarnings("SameReturnValue")
+@Transactional(readOnly = true)
 @Repository
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, UUID> {
     // Get by
-    Optional<User> getUserByUUID(UUID uuid);
-    Optional<User> getUserByLogin(String login);
+    Optional<User> findByLogin(String login);
 
     // Exists by
     boolean existsByLoginOrEmail(String login, String email);
     boolean existsByLogin(String login);
     boolean existsByEmail(String email);
 
-    // Add, delete
-    boolean addUser(User user);
-    boolean deleteUserByLogin(String login);
+    // Delete
+    @Modifying
+    int deleteByLogin(String login);
 }
