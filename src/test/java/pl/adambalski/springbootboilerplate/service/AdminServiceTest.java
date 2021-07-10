@@ -40,12 +40,12 @@ public class AdminServiceTest {
     @Test
     void testGetUserDataByUuidWhenThereIsNoSuchUser() {
         UUID uuid = UUID.randomUUID();
-        Mockito.when(adminRepository.findByUuid(uuid)).thenReturn(Optional.empty());
+        Mockito.when(adminRepository.findById(uuid)).thenReturn(Optional.empty());
 
         Executable executable = () -> adminService.getUserByUUID(uuid);
         assertThrows(NoSuchUserException.class, executable);
 
-        Mockito.verify(adminRepository).findByUuid(uuid);
+        Mockito.verify(adminRepository).findById(uuid);
     }
 
     @Test
@@ -53,12 +53,12 @@ public class AdminServiceTest {
         User expectedUser = getRandUser();
         Optional<User> optionalUser = Optional.of(expectedUser);
         UUID  uuid= UUID.randomUUID();
-        Mockito.when(adminRepository.findByUuid(uuid)).thenReturn(optionalUser);
+        Mockito.when(adminRepository.findById(uuid)).thenReturn(optionalUser);
 
         User actualUser = adminService.getUserByUUID(uuid);
         assertEquals(expectedUser, actualUser);
 
-        Mockito.verify(adminRepository).findByUuid(uuid);
+        Mockito.verify(adminRepository).findById(uuid);
     }
 
     @Test

@@ -22,8 +22,6 @@ import java.util.UUID;
 public interface AdminRepository extends JpaRepository<User, UUID> {
     Optional<User> findByLogin(String login);
 
-    Optional<User> findByUuid(UUID uuid);
-
     @Modifying
     int deleteByLogin(String login);
 }

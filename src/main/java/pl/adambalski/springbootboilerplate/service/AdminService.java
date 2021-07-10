@@ -27,7 +27,7 @@ public class AdminService {
     }
 
     public User getUserByUUID(UUID uuid) throws NoSuchUserException {
-        Optional<User> optionalUser = adminRepository.findByUuid(uuid);
+        Optional<User> optionalUser = adminRepository.findById(uuid);
         return optionalUser.orElseThrow(NoSuchUserException::new);
     }
 

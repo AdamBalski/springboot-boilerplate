@@ -11,7 +11,6 @@ import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,29 +35,6 @@ public class AdminRepositoryTest {
     AdminRepository adminRepository;
 
     PasswordEncoder passwordEncoder = new PasswordEncoderFactory().passwordEncoderBean();
-
-    @Test
-    void testFindByUUIDWhenUserExists() {
-        SignUpUserDto signUpUserDto = new SignUpUserDto(
-                "login",
-                "Full Name",
-                "a@a.jpg",
-                "password",
-                "password");
-        User user = User.valueOf(signUpUserDto, passwordEncoder);
-        UUID uuid = user.getUuid();
-        adminRepository.save(user);
-
-        Optional<User> userOptional = adminRepository.findByUuid(uuid);
-
-        assertTrue(userOptional.isPresent());
-        assertEquals(user, userOptional.get());
-    }
-
-    @Test
-    void testFindByUUIDWhenUserDoesNotExist() {
-        assertTrue(adminRepository.findByUuid(UUID.randomUUID()).isEmpty());
-    }
 
     @Test
     void testFindByLoginWhenUserExists() {
