@@ -20,7 +20,7 @@ class LoggerTest {
 
     @BeforeEach
     void init() {
-        autoCloseable = MockitoAnnotations.openMocks(LoggerTest.class);
+        autoCloseable = MockitoAnnotations.openMocks(this);
         logger = Mockito.mock(Logger.class);
 
         obj = new Object() {
@@ -31,7 +31,7 @@ class LoggerTest {
         };
 
 
-        // setting up the mocked logger
+//         setting up the mocked logger
         doCallRealMethod()
                 .when(logger)
                 .log(any(Object.class), eq(LoggerTest.class), any(Status.class));

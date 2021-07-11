@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.adambalski</groupId>
@@ -15,14 +15,14 @@
     <description>Boilerplate for Springboot apps</description>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>16</java.version>
 
-        <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
-        <spring-security-test.version>5.3.3.RELEASE</spring-security-test.version>
-        <postgresql.version>42.2.14</postgresql.version>
-        <mockito.version>3.4.6</mockito.version>
-        <lombok.version>1.18.12</lombok.version>
+        <spring-boot.version>2.5.2</spring-boot.version>
+        <spring-security-test.version>5.5.1</spring-security-test.version>
+        <postgresql.version>42.2.23</postgresql.version>
+        <mockito.version>3.11.2</mockito.version>
         <h2.version>1.4.200</h2.version>
+        <jjwt.version>0.11.2</jjwt.version>
     </properties>
 
     <dependencies>
@@ -45,20 +45,20 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.11.2</version>
+            <version>${jjwt.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.11.2</version>
+            <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.11.2</version>
+            <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!--        -->
@@ -124,15 +124,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>15</source>
-                    <target>15</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
             </plugin>
         </plugins>
     </build>

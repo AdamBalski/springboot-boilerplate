@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -28,6 +29,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @WebMvcTest
+// Spring security preserved security context between some tests, so they
+// didn't work. In a normal world, this wouldn't happen, because context
+// is new during each request.
+// NOTE: When sessions are used context is preserved between
+// requests, but this application is not using them.
+@WithAnonymousUser
 public class AuthenticationControllerTest {
     @Autowired
     MockMvc mvc;
