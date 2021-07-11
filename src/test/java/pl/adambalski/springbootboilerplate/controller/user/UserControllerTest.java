@@ -53,15 +53,16 @@ class UserControllerTest {
 
     }
 
+    @AfterEach
+    void destroy() throws Exception {
+        autoCloseable.close();
+        SecurityContextHolder.clearContext();
+    }
+
     private void setContext() {
         SecurityContextHolder.clearContext();
         Authentication authentication = new UsernamePasswordAuthenticationToken(login, "");
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    @AfterEach
-    void destroy() throws Exception {
-        this.autoCloseable.close();
     }
 
     @Test
