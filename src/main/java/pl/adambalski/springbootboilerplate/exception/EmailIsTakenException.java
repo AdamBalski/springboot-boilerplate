@@ -11,6 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
  */
 public class EmailIsTakenException extends ResponseStatusException {
     public EmailIsTakenException() {
-        super(HttpStatus.BAD_REQUEST, "EMAIL_IS_TAKEN_EXCEPTION");
+        super(HttpStatus.CONFLICT, "EMAIL_IS_TAKEN_EXCEPTION");
     }
 }

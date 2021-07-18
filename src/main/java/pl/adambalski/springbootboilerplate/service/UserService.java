@@ -46,9 +46,9 @@ public class UserService {
     }
 
     public void addSignUpUserDto(SignUpUserDto dto) {
-        // Throws HTTP400 if not valid
+        // Throws HTTP422 if not valid
         checkIfValid(dto);
-        // Throws HTTP400 if a field is taken
+        // Throws HTTP409 if a field is taken
         checkIfTaken(dto);
 
         // Add
@@ -56,7 +56,7 @@ public class UserService {
         addUser(user);
     }
 
-    // Throws HTTP400 (with a reason) if not valid
+    // Throws HTTP422 (with a reason) if not valid
     private void checkIfValid(SignUpUserDto dto) {
         SignUpUserDtoValidationResult validationResult = SignUpUserDtoValidator.validate(dto);
         if(!validationResult.isSuccess()) {
@@ -64,7 +64,7 @@ public class UserService {
         }
     }
 
-    // Throws HTTP400 (with a field taken) if taken
+    // Throws HTTP409 (with a field taken) if taken
     private void checkIfTaken(SignUpUserDto dto) {
         if(userRepository.existsByLoginOrEmail(dto.login(), dto.email())) {
             if(userRepository.existsByLogin(dto.login())) {

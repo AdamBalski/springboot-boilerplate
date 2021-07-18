@@ -11,6 +11,6 @@ import org.springframework.web.server.ResponseStatusException;
  */
 public class LoginIsTakenException extends ResponseStatusException {
     public LoginIsTakenException() {
-        super(HttpStatus.BAD_REQUEST, "LOGIN_IS_TAKEN_EXCEPTION");
+        super(HttpStatus.CONFLICT, "LOGIN_IS_TAKEN_EXCEPTION");
     }
 }

@@ -98,6 +98,55 @@ class SignUpUserDtoValidatorTest {
                         "user@name.jpg".repeat(100),
                         "password",
                         "password"
+                ),
+                new SignUpUserDto( // Username is null
+                        null,
+                        "User Name",
+                        "user@name.jpg",
+                        "password",
+                        "password"
+                ),
+                new SignUpUserDto( // Full name is null
+                        "username",
+                        null,
+                        "user@name.jpg",
+                        "password",
+                        "password"
+                ),
+                new SignUpUserDto( // E-mail is null
+                        "username",
+                        "User Name",
+                        null,
+                        "password",
+                        "password"
+                ),
+                new SignUpUserDto( // Password1 is null
+                        "username",
+                        "User Name",
+                        "user@name.jpg",
+                        null,
+                        "password"
+                ),
+                new SignUpUserDto( // Password2 is null
+                        "username",
+                        "User Name",
+                        "user@name.jpg",
+                        "password",
+                        null
+                ),
+                new SignUpUserDto( // Every field is null
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                ),
+                new SignUpUserDto( // Login and password2 is null
+                        null,
+                        "User Name",
+                        "user@name.jpg",
+                        "password",
+                        null
                 ));
     }
 
@@ -222,5 +271,73 @@ class SignUpUserDtoValidatorTest {
         );
     }
 
+    @Test
+    void testIfLoginIsNull() {
+        SignUpUserDto userDto = dtos.get(11);
 
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfFullNameIsNull() {
+        SignUpUserDto userDto = dtos.get(12);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfEmailIsNull() {
+        SignUpUserDto userDto = dtos.get(13);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfPassword1IsNull() {
+        SignUpUserDto userDto = dtos.get(14);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfPassword2IsNull() {
+        SignUpUserDto userDto = dtos.get(15);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfEveryFieldIsNull() {
+        SignUpUserDto userDto = dtos.get(16);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
+
+    @Test
+    void testIfLoginAndPassword2AreNull() {
+        SignUpUserDto userDto = dtos.get(17);
+
+        Assertions.assertEquals(
+                SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL,
+                SignUpUserDtoValidator.validate(userDto)
+        );
+    }
 }

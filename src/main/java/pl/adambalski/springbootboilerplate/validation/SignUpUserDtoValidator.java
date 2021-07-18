@@ -30,6 +30,8 @@ import java.util.regex.Pattern;
  *  * both passwords are equal to each other
  *  * format is similar to login's format, but minimum 8 chars<br><br>
  *
+ * Additionally every field must not be null.<br><br>
+ *
  * @see Validator
  * @see SignUpUserDtoValidationResult
  * @author Adam Balski
@@ -96,8 +98,19 @@ public class SignUpUserDtoValidator {
                         SignUpUserDtoValidationResult.PASSWORD_NOT_CORRECT;
             };
 
+    private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> nullValidation =
+            signUpUserDto ->
+                    signUpUserDto.login() == null ||
+                    signUpUserDto.fullName() == null ||
+                    signUpUserDto.email() == null ||
+                    signUpUserDto.password1() == null ||
+                    signUpUserDto.password2() == null ?
+                    SignUpUserDtoValidationResult.AT_LEAST_ONE_FIELD_IS_NULL :
+                    SignUpUserDtoValidationResult.SUCCESS;
+
     private static final Validator<SignUpUserDto, SignUpUserDtoValidationResult> fullValidation =
-            dto -> loginValidation
+            dto -> nullValidation
+                    .and(loginValidation)
                     .and(fullNameValidation)
                     .and(differentPasswordsValidation)
                     .and(emailValidation)

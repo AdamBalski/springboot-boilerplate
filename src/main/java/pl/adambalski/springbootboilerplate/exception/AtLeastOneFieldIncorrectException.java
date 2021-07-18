@@ -13,6 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
  */
 public class AtLeastOneFieldIncorrectException extends ResponseStatusException {
     public AtLeastOneFieldIncorrectException() {
-        super(HttpStatus.BAD_REQUEST, "AT_LEAST_ONE_FIELD_IS_INCORRECT_EXCEPTION");
+        super(HttpStatus.UNPROCESSABLE_ENTITY, "AT_LEAST_ONE_FIELD_IS_INCORRECT_EXCEPTION");
     }
 }

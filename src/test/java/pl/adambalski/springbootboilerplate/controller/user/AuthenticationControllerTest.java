@@ -66,14 +66,13 @@ public class AuthenticationControllerTest {
         var requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/authenticate")
                 .content(requestBody)
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("utf-8");
+                .contentType(MediaType.APPLICATION_JSON);
 
         try {
             mvc.perform(requestBuilder)
                     .andExpect(resultMatcher)
                     .andDo(MockMvcResultHandlers.print());
-        } catch (Exception e) {
+        } catch(Exception e) {
             fail(e);
         }
     }

@@ -10,7 +10,7 @@ class LoginIsTakenExceptionTest {
     @Test
     void testConstructor() {
         var loginIsTakenException = new LoginIsTakenException();
-        var responseStatusException = new ResponseStatusException(HttpStatus.BAD_REQUEST, "LOGIN_IS_TAKEN_EXCEPTION");
+        var responseStatusException = new ResponseStatusException(HttpStatus.CONFLICT, "LOGIN_IS_TAKEN_EXCEPTION");
 
         assertAll(
                 () -> assertEquals(responseStatusException.getReason(), loginIsTakenException.getReason()),

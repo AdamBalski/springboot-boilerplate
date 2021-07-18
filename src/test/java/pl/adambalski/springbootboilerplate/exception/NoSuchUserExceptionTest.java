@@ -10,7 +10,7 @@ class NoSuchUserExceptionTest {
     @Test
     void testConstructor() {
         var noSuchUserException = new NoSuchUserException();
-        var responseStatusException = new ResponseStatusException(HttpStatus.BAD_REQUEST, "NO_SUCH_USER_EXCEPTION");
+        var responseStatusException = new ResponseStatusException(HttpStatus.NOT_FOUND, "NO_SUCH_USER_EXCEPTION");
 
         assertAll(
                 () -> assertEquals(responseStatusException.getReason(), noSuchUserException.getReason()),

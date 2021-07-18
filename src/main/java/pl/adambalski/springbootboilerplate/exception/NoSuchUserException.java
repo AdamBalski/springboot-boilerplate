@@ -11,8 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
  * @author Adam Balski
  * @see org.springframework.web.server.ResponseStatusException
  */
-public final class NoSuchUserException extends ResponseStatusException {
+public class NoSuchUserException extends ResponseStatusException {
     public NoSuchUserException() {
-        super(HttpStatus.BAD_REQUEST, "NO_SUCH_USER_EXCEPTION");
+        super(HttpStatus.NOT_FOUND, "NO_SUCH_USER_EXCEPTION");
     }
 }

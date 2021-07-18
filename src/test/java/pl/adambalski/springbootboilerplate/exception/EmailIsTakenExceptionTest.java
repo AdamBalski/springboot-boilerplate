@@ -10,7 +10,7 @@ class EmailIsTakenExceptionTest {
     @Test
     void testConstructor() {
         var emailIsTakenException = new EmailIsTakenException();
-        var responseStatusException = new ResponseStatusException(HttpStatus.BAD_REQUEST, "EMAIL_IS_TAKEN_EXCEPTION");
+        var responseStatusException = new ResponseStatusException(HttpStatus.CONFLICT, "EMAIL_IS_TAKEN_EXCEPTION");
 
         assertAll(
                 () -> assertEquals(responseStatusException.getReason(), emailIsTakenException.getReason()),

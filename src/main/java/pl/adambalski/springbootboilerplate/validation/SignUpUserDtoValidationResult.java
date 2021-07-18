@@ -16,6 +16,7 @@ public enum SignUpUserDtoValidationResult implements ValidationResult {
     EMAIL_NOT_CORRECT,
     PASSWORD_NOT_CORRECT,
     PASSWORDS_DIFFERENT,
+    AT_LEAST_ONE_FIELD_IS_NULL,
     SUCCESS;
 
     @Override

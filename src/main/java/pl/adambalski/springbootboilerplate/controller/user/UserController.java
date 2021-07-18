@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/api/user/sign-up")
-    @PreAuthorize(value = "permitAll()")
+    @PreAuthorize(value = "isAnonymous()")
     public void signUp(@RequestBody SignUpUserDto signUpUserDto) {
         userService.addSignUpUserDto(signUpUserDto);
     }
