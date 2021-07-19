@@ -20,6 +20,7 @@ import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 
 import javax.crypto.SecretKey;
 import javax.servlet.Filter;
+import java.time.Period;
 
 /**
  * Security configuration.
@@ -34,6 +35,8 @@ import javax.servlet.Filter;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final String JWT_TOKEN_PREFIX = "Bearer ";
     public static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    public static final Period REFRESH_TOKEN_EXPIRATION_PERIOD = Period.ofDays(365);
+    public static final int REFRESH_TOKEN_LENGTH = 12;
 
     private UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
