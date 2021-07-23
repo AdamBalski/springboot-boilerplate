@@ -10,6 +10,15 @@ import java.time.Instant;
 import java.time.Period;
 import java.util.Objects;
 
+/**
+ * Is used for authenticating users that want to get an access token,
+ * which you can use to authenticate to other endpoints.<br><br>
+ *
+ * @author Adam Balski
+ * @see pl.adambalski.springbootboilerplate.repository.RefreshTokenRepository
+ * @see Cookie
+ * @see User
+ */
 @Entity
 @Table(name = "refresh_token", schema = "public")
 public final class RefreshToken {
