@@ -26,15 +26,17 @@ spring.jpa.properties.hibernate.hbm2ddl.auto = validate
 ---
 
 ### Done with: (for more info check `pom.xml`)
-* jdk 15 (with preview features turned on)
+* jdk 16 (with preview features turned on)
 * maven
 * spring boot
+* jpa with hibernate
 * postgresql
 * jackson based jjwt
-* h2
+* test containers
 * mockito
-* junit
+* junit5
 * slf4j
+* docker
 
 ### License
 
