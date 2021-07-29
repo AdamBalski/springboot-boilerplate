@@ -24,10 +24,10 @@ import java.util.Objects;
 public final class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false, columnDefinition = "", unique = true, updatable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", columnDefinition = "uuid", updatable = false, nullable = false)
     private User user;
 

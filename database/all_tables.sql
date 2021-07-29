@@ -1,23 +1,36 @@
-create table "user"
+-- user
+CREATE TABLE "user"
 (
-    id uuid not null
-        constraint user_pk
-            primary key,
-    login varchar(30) not null,
-    full_name varchar(50) not null,
-    email varchar(320) not null,
-    password text not null,
-    role varchar(10) not null
+    id        char(36)     NOT NULL,
+    login     VARCHAR(30)  NOT NULL,
+    full_name VARCHAR(50)  NOT NULL,
+    email     VARCHAR(320) NOT NULL,
+    password  TEXT         NOT NULL,
+    "role"    VARCHAR(30)  NOT NULL,
+    CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
-alter table "user" owner to datagrip;
+ALTER TABLE "user"
+    ADD CONSTRAINT uc_user_email UNIQUE (email);
 
-create unique index user_email_uindex
-	on "user" (email);
+ALTER TABLE "user"
+    ADD CONSTRAINT uc_user_id UNIQUE (id);
 
-create unique index user_id_uindex
-	on "user" (id);
+ALTER TABLE "user"
+    ADD CONSTRAINT uc_user_login UNIQUE (login);
 
-create unique index user_login_uindex
-	on "user" (login);
+-- refresh_token
+CREATE TABLE refresh_token
+(
+    id              BIGINT      NOT NULL,
+    user_id         UUID        NOT NULL,
+    token           VARCHAR(12) NOT NULL,
+    expiration_date date        NOT NULL,
+    CONSTRAINT pk_refresh_token PRIMARY KEY (id)
+);
 
+ALTER TABLE refresh_token
+    ADD CONSTRAINT uc_refresh_token_id UNIQUE (id);
+
+ALTER TABLE refresh_token
+    ADD CONSTRAINT FK_REFRESH_TOKEN_ON_USER FOREIGN KEY (user_id) REFERENCES "user" (id)

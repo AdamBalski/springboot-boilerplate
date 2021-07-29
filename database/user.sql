@@ -1,23 +1,19 @@
-create table "user"
+CREATE TABLE user
 (
-    id uuid not null
-        constraint user_pk
-            primary key,
-    login varchar(30) not null,
-    full_name varchar(50) not null,
-    email varchar(320) not null,
-    password text not null,
-    role varchar(10) not null
+    id        char(36)     NOT NULL,
+    login     VARCHAR(30)  NOT NULL,
+    full_name VARCHAR(50)  NOT NULL,
+    email     VARCHAR(320) NOT NULL,
+    password  TEXT         NOT NULL,
+    `role`    VARCHAR(30)  NOT NULL,
+    CONSTRAINT pk_user PRIMARY KEY (id)
 );
 
-alter table "user" owner to datagrip;
+ALTER TABLE user
+    ADD CONSTRAINT uc_user_email UNIQUE (email);
 
-create unique index user_email_uindex
-	on "user" (email);
+ALTER TABLE user
+    ADD CONSTRAINT uc_user_id UNIQUE (id);
 
-create unique index user_id_uindex
-	on "user" (id);
-
-create unique index user_login_uindex
-	on "user" (login);
-
+ALTER TABLE user
+    ADD CONSTRAINT uc_user_login UNIQUE (l
