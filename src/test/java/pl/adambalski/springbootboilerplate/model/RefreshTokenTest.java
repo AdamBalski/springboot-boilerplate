@@ -219,7 +219,7 @@ class RefreshTokenTest {
     void testSetId() {
         RefreshToken refreshToken = new RefreshToken(1, user1, "123456", new Date(123456));
 
-        refreshToken.setId(2);
+        refreshToken.setId(2L);
 
         assertEquals(2, refreshToken.getId());
     }
@@ -255,7 +255,7 @@ class RefreshTokenTest {
     void testNoArgsConstructor() {
         RefreshToken refreshToken = new RefreshToken();
 
-        assertEquals(0, refreshToken.getId());
+        assertNull(refreshToken.getId());
         assertNull(refreshToken.getUser());
         assertNull(refreshToken.getToken());
         assertNull(refreshToken.getExpirationDate());
@@ -291,6 +291,7 @@ class RefreshTokenTest {
 
         assertEquals(0, refreshToken.getId());
         assertEquals(user1, refreshToken.getUser());
+
         assertTrue(refreshToken.getToken().matches("^[A-Za-z0-9]{%s}$".formatted(length)));
         // java.sql.Date doesn't override Object::equals, so we have to first convert it to a string
         assertEquals(refreshToken.getExpirationDate().toString(), expirationDate.toString());

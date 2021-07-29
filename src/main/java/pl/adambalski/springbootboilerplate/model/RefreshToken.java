@@ -25,10 +25,10 @@ public final class RefreshToken {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
-    private long id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", columnDefinition = "uuid", updatable = false, nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id", columnDefinition = "uuid", nullable = false)
     private User user;
 
     @Column(name = "token", columnDefinition = "varchar(12)", updatable = false, nullable = false)
@@ -72,11 +72,11 @@ public final class RefreshToken {
         return cookie;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
