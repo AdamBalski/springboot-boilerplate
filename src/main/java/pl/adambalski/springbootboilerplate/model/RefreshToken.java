@@ -27,9 +27,8 @@ public final class RefreshToken {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", columnDefinition = "uuid", nullable = false)
-    private User user;
+    @Column(name = "user_login", updatable = false, nullable = false)
+    private String userLogin;
 
     @Column(name = "token", columnDefinition = "varchar(12)", updatable = false, nullable = false)
     private String token;
@@ -41,21 +40,21 @@ public final class RefreshToken {
 
     }
 
-    public RefreshToken(long id, User user, String token, Date expirationDate) {
+    public RefreshToken(long id, String userLogin, String token, Date expirationDate) {
         this.id = id;
-        this.user = user;
+        this.userLogin = userLogin;
         this.token = token;
         this.expirationDate = expirationDate;
     }
 
-    public static RefreshToken createRefreshToken(User user, RandomAlphaNumericStringGenerator randomAlphaNumericStringGenerator) {
+    public static RefreshToken createRefreshToken(String userLogin, RandomAlphaNumericStringGenerator randomAlphaNumericStringGenerator) {
         String token = randomAlphaNumericStringGenerator.generate();
 
         Instant now = Instant.now();
         Period expirationPeriod = SecurityConfiguration.REFRESH_TOKEN_EXPIRATION_PERIOD;
         java.sql.Date expirationDate = new Date(now.plus(expirationPeriod).toEpochMilli());
 
-        return new RefreshToken(0, user, token, expirationDate);
+        return new RefreshToken(0, userLogin, token, expirationDate);
     }
 
     public Cookie toCookie() {
@@ -80,12 +79,12 @@ public final class RefreshToken {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserLogin() {
+        return userLogin;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public String getToken() {
@@ -110,14 +109,14 @@ public final class RefreshToken {
         if (o == null || getClass() != o.getClass()) return false;
         RefreshToken that = (RefreshToken) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(user, that.user) &&
+                Objects.equals(userLogin, that.userLogin) &&
                 Objects.equals(token, that.token) &&
                 Objects.equals(expirationDate, that.expirationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, token, expirationDate);
+        return Objects.hash(id, userLogin, token, expirationDate);
     }
 
     @Override
@@ -126,8 +125,8 @@ public final class RefreshToken {
         return new StringBuilder().append("RefreshToken{")
                 .append("id=")
                     .append(id)
-                .append(", user=")
-                    .append(user)
+                .append(", userLogin=")
+                    .append(userLogin)
                 .append(", token='")
                     .append(token).append('\'')
                 .append(", expirationDate=")

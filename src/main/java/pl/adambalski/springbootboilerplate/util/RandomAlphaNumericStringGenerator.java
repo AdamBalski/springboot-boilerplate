@@ -28,6 +28,6 @@ public class RandomAlphaNumericStringGenerator {
     }
 
     public String generate() {
-        return generate(12);
+        return generate(length);
     }
 }
