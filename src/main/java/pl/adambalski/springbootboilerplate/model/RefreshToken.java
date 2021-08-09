@@ -27,7 +27,7 @@ public final class RefreshToken {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
 
-    @Column(name = "user_login", updatable = false, nullable = false)
+    @Column(name = "user_login", columnDefinition = "varchar(30)", updatable = false, nullable = false)
     private String userLogin;
 
     @Column(name = "token", columnDefinition = "varchar(12)", updatable = false, nullable = false)

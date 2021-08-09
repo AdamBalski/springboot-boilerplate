@@ -23,7 +23,7 @@ ALTER TABLE "user"
 CREATE TABLE refresh_token
 (
     id              BIGINT       NOT NULL,
-    user_login      VARCHAR(255) NOT NULL,
+    user_login      VARCHAR(30) NOT NULL,
     token           VARCHAR(12)  NOT NULL,
     expiration_date date         NOT NULL,
     CONSTRAINT pk_refresh_token PRIMARY KEY (id)
