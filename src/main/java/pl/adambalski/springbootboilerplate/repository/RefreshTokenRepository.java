@@ -8,6 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.adambalski.springbootboilerplate.model.RefreshToken;
 import pl.adambalski.springbootboilerplate.model.User;
 
+/**
+ * Performs SQL queries on database. Primarily called by {@link pl.adambalski.springbootboilerplate.service.AuthenticationService}.<br><br>
+ *
+ * @author Adam Balski
+ * @see pl.adambalski.springbootboilerplate.service.AuthenticationService
+ * @see RefreshToken
+ * @see User
+ * @see pl.adambalski.springbootboilerplate.controller.user.AuthenticationController
+ */
 @Repository
 @Transactional(readOnly = true)
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
