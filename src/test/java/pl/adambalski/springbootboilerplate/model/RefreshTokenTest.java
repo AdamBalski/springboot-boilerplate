@@ -264,7 +264,7 @@ class RefreshTokenTest {
         RefreshToken refreshToken = new RefreshToken(1, "user1", "123456", new Date(2137));
 
         assertEquals(1, refreshToken.getId());
-        assertEquals(user1, refreshToken.getUserLogin());
+        assertEquals("user1", refreshToken.getUserLogin());
         assertEquals("123456", refreshToken.getToken());
         assertEquals(new Date(2137), refreshToken.getExpirationDate());
     }
@@ -273,7 +273,7 @@ class RefreshTokenTest {
     void testToString() {
         RefreshToken refreshToken = new RefreshToken(1, "user1", "123456", new Date(2137));
 
-        String expected = "RefreshToken{id=1, user=%s, token='123456', expirationDate=1970-01-01}".formatted(user1);
+        String expected = "RefreshToken{id=1, userLogin='user1', token='123456', expirationDate=1970-01-01}";
         String actual = refreshToken.toString();
 
         assertEquals(expected, actual);
@@ -288,7 +288,7 @@ class RefreshTokenTest {
         RefreshToken refreshToken = RefreshToken.createRefreshToken("user1", new RandomAlphaNumericStringGenerator(length));
 
         assertEquals(0, refreshToken.getId());
-        assertEquals(user1, refreshToken.getUserLogin());
+        assertEquals("user1", refreshToken.getUserLogin());
 
         assertTrue(refreshToken.getToken().matches("^[A-Za-z0-9]{%s}$".formatted(length)));
         // java.sql.Date doesn't override Object::equals, so we have to first convert it to a string

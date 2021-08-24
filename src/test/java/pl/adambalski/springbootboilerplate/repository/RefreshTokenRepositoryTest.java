@@ -75,17 +75,17 @@ class RefreshTokenRepositoryTest {
 
     private List<RefreshToken> prepareExpired() {
         return List.of(
-                new RefreshToken(0, users.get(0), "120ABC", new Date(0)),
-                new RefreshToken(0, users.get(1), "DE1ABC", new Date(100)),
-                new RefreshToken(0, users.get(2), "ABC321", new Date(2137))
+                new RefreshToken(0, users.get(0).getLogin(), "120ABC", new Date(0)),
+                new RefreshToken(0, users.get(1).getLogin(), "DE1ABC", new Date(100)),
+                new RefreshToken(0, users.get(2).getLogin(), "ABC321", new Date(2137))
         );
     }
 
     private List<RefreshToken> prepareNonExpired(long now) {
         return List.of(
-                new RefreshToken(0, users.get(1), "A123EF", new Date(now + 10)),
-                new RefreshToken(0, users.get(0), "123DEF", new Date(now + 100)),
-                new RefreshToken(0, users.get(2), "ABC123", new Date(now + 2137))
+                new RefreshToken(0, users.get(1).getLogin(), "A123EF", new Date(now + 10)),
+                new RefreshToken(0, users.get(0).getLogin(), "123DEF", new Date(now + 100)),
+                new RefreshToken(0, users.get(2).getLogin(), "ABC123", new Date(now + 2137))
         );
     }
 
@@ -153,18 +153,18 @@ class RefreshTokenRepositoryTest {
 
     @Test
     void testExistsByUserAndTokenWhenThereIsNoneRefreshTokens() {
-        assertFalse(refreshTokenRepository.existsByUserAndToken(users.get(0), "TOKEN"));
+        assertFalse(refreshTokenRepository.existsByUserLoginAndToken(users.get(0).getLogin(), "TOKEN"));
     }
 
     @Test
     void testExistsByUserAndTokenWhenThereIsUser() {
         User user = users.get(0);
-        RefreshToken refreshToken = new RefreshToken(0, user, "TOKEN1", new Date(getNow() + 2137));
+        RefreshToken refreshToken = new RefreshToken(0, user.getLogin(), "TOKEN1", new Date(getNow() + 2137));
 
         userRepository.save(user);
         refreshTokenRepository.save(refreshToken);
 
-        boolean result = refreshTokenRepository.existsByUserAndToken(user, "TOKEN2");
+        boolean result = refreshTokenRepository.existsByUserLoginAndToken(user.getLogin(), "TOKEN2");
 
         assertFalse(result);
     }
@@ -174,13 +174,13 @@ class RefreshTokenRepositoryTest {
         User user = users.get(0);
         User anotherUser = users.get(1);
 
-        RefreshToken refreshToken = new RefreshToken(0, user, "TOKEN1", new Date(getNow() + 2137));
+        RefreshToken refreshToken = new RefreshToken(0, user.getLogin(), "TOKEN1", new Date(getNow() + 2137));
 
         userRepository.save(user);
         userRepository.save(anotherUser);
         refreshTokenRepository.save(refreshToken);
 
-        boolean result = refreshTokenRepository.existsByUserAndToken(anotherUser, "TOKEN1");
+        boolean result = refreshTokenRepository.existsByUserLoginAndToken(anotherUser.getLogin(), "TOKEN1");
 
         assertFalse(result);
     }
@@ -190,8 +190,8 @@ class RefreshTokenRepositoryTest {
         User user = users.get(0);
         User anotherUser = users.get(1);
 
-        RefreshToken refreshToken = new RefreshToken(0, user, "TOKEN1", new Date(getNow() + 2137));
-        RefreshToken anotherRefreshToken = new RefreshToken(0, anotherUser, "TOKEN2", new Date(getNow() + 2137));
+        RefreshToken refreshToken = new RefreshToken(0, user.getLogin(), "TOKEN1", new Date(getNow() + 2137));
+        RefreshToken anotherRefreshToken = new RefreshToken(0, anotherUser.getLogin(), "TOKEN2", new Date(getNow() + 2137));
 
         userRepository.save(user);
         userRepository.save(anotherUser);
@@ -199,7 +199,7 @@ class RefreshTokenRepositoryTest {
         refreshTokenRepository.save(refreshToken);
         refreshTokenRepository.save(anotherRefreshToken);
 
-        boolean result = refreshTokenRepository.existsByUserAndToken(user, "TOKEN2");
+        boolean result = refreshTokenRepository.existsByUserLoginAndToken(user.getLogin(), "TOKEN2");
 
         assertFalse(result);
     }
@@ -207,12 +207,12 @@ class RefreshTokenRepositoryTest {
     @Test
     void testExistsByUserAndTokenWhenThereIsUserAndTokenInTheSameRow() {
         User user = users.get(0);
-        RefreshToken refreshToken = new RefreshToken(0, user, "TOKEN1", new Date(getNow() + 2137));
+        RefreshToken refreshToken = new RefreshToken(0, user.getLogin(), "TOKEN1", new Date(getNow() + 2137));
 
         userRepository.save(user);
         refreshTokenRepository.save(refreshToken);
 
-        boolean result = refreshTokenRepository.existsByUserAndToken(user, "TOKEN1");
+        boolean result = refreshTokenRepository.existsByUserLoginAndToken(user.getLogin(), "TOKEN1");
 
         assertTrue(result);
     }

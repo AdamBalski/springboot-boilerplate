@@ -1,6 +1,9 @@
 package pl.adambalski.springbootboilerplate.util;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
+import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -9,7 +12,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class RandomAlphaNumericStringGeneratorTest {
@@ -17,14 +19,15 @@ class RandomAlphaNumericStringGeneratorTest {
     void testGenerateWithDefaultLength() {
         String randomString = "ABC123456789";
 
-        var mockGenerator = mock(RandomAlphaNumericStringGenerator.class);
-
-        when(mockGenerator.generate())
+        var mock = Mockito.mock(RandomAlphaNumericStringGenerator.class);
+        when(mock.generate())
                 .thenCallRealMethod();
-        when(mockGenerator.generate(12))
+        when(mock.generate(12))
                 .thenReturn(randomString);
 
-        assertEquals(randomString, mockGenerator.generate());
+        ReflectionTestUtils.setField(mock, "length", SecurityConfiguration.REFRESH_TOKEN_LENGTH);
+
+        assertEquals(randomString, mock.generate());
     }
 
     @Test
