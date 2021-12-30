@@ -19,6 +19,7 @@ import pl.adambalski.springbootboilerplate.exception.LoginIsTakenException;
 import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.AdminRepository;
+import pl.adambalski.springbootboilerplate.repository.RefreshTokenRepository;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 import pl.adambalski.springbootboilerplate.service.UserService;
@@ -48,6 +49,8 @@ public class UserControllerTest {
     AdminRepository adminRepository;
     @MockBean
     UserRepository userRepository;
+    @MockBean
+    RefreshTokenRepository refreshTokenRepository;
 
     SignUpUserDto mockUserDto;
     User mockUser;
@@ -130,7 +133,7 @@ public class UserControllerTest {
 
     @Test
     @WithAnonymousUser
-    void testGetOwnDataAdUnauthenticated() throws Exception {
+    void testGetOwnDataAsUnauthenticated() throws Exception {
         mockMvc.perform(get("/api/user/get-data"))
                 .andExpect(status().isUnauthorized());
     }
@@ -223,7 +226,7 @@ public class UserControllerTest {
                 .content(content);
         mockMvc.perform(request)
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(status().reason("AT_LEAST_ONE_FIELD_IS_INCORRECT_EXCEPTION"));
+                .andExpect(status().reason("AT_LEAST_ONE_FIELD_INCORRECT_EXCEPTION"));
 
         verify(userService).addSignUpUserDto(mockUserDto);
     }

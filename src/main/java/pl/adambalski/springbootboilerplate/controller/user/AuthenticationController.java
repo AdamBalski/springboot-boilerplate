@@ -2,21 +2,25 @@ package pl.adambalski.springbootboilerplate.controller.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.*;
 import pl.adambalski.springbootboilerplate.dto.JwtTokenDto;
 import pl.adambalski.springbootboilerplate.dto.LoginDto;
+import pl.adambalski.springbootboilerplate.model.RefreshToken;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
+import pl.adambalski.springbootboilerplate.service.AuthenticationService;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.Date;
+import java.time.Instant;
+
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.REFRESH_TOKEN_COOKIE_NAME;
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.USERNAME_COOKIE_NAME;
 
 /**
  * Contains a function responsible for authenticating a user, which returns a jwt token.<br><br>
@@ -33,52 +37,41 @@ import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 @RestController
 @CrossOrigin
 public class AuthenticationController {
-    private final UserDetailsService userDetailsService;
-    private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder;
+    AuthenticationService authenticationService;
 
     @Autowired
-    public AuthenticationController(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.jwtUtil = new JwtUtil(SecurityConfiguration.KEY);
-        this.passwordEncoder = passwordEncoder;
-        this.userDetailsService = userDetailsService;
+    public AuthenticationController(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
     }
 
-    @PostMapping(value = "/api/user/authenticate")
+    @PostMapping(value = "/api/auth/authenticate")
+    @PreAuthorize(value = "isAnonymous()")
+    public void authenticate(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+        RefreshToken refreshToken = authenticationService.authenticate(loginDto);
+
+        response.addCookie(refreshToken.toCookie());
+        response.addCookie(createUsernameCookie(loginDto.username(), refreshToken.getExpirationDate()));
+    }
+
+    @PostMapping(value = "/api/auth/refresh")
     @PreAuthorize(value = "permitAll()")
-    public JwtTokenDto authenticate(@RequestBody LoginDto loginDto) {
-        String username = loginDto.username();
-        String password = loginDto.password();
-
-        // 3 lines below can throw HttpStatus.BAD_REQUEST (HTTP 400) or HTTPStatus.UNAUTHORIZED (HTTP 401)
-        checkIfCredentialsAreNull(username, password);
-        UserDetails userDetails = loadUserDetails(username);
-        checkIfPasswordMatches(userDetails, password);
-
-        return getJwtTokenDto(username);
+    public JwtTokenDto refresh(@CookieValue(USERNAME_COOKIE_NAME) String username,
+                               @CookieValue(REFRESH_TOKEN_COOKIE_NAME) String refreshTokenValue) {
+         return authenticationService.refresh(username, refreshTokenValue);
     }
 
-    private void checkIfCredentialsAreNull(String username, String password) {
-        if(username == null || password == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
+    private Cookie createUsernameCookie(String username, Date expirationDate) {
+        Cookie cookie = new Cookie(USERNAME_COOKIE_NAME, username);
 
-    private UserDetails loadUserDetails(String username) {
-        try {
-            return userDetailsService.loadUserByUsername(username);
-        } catch (UsernameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+        int secondsToExpirationDate = (int)(expirationDate.getTime() - Instant.now().toEpochMilli()) / 1000;
+        cookie.setMaxAge(secondsToExpirationDate);
 
-    private void checkIfPasswordMatches(UserDetails userDetails, String password) {
-        if(!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-    }
+        cookie.setSecure(SecurityConfiguration.COOKIE_SECURENESS);
+        cookie.setHttpOnly(true);
+        // "/api/auth/authenticate" and "/api/auth/get-access-token"
+        cookie.setPath("/api/auth/");
+        cookie.setComment("Username of the logged in user.");
 
-    private JwtTokenDto getJwtTokenDto(String username) {
-        return new JwtTokenDto(jwtUtil.tokenOf(username));
+        return cookie;
     }
 }

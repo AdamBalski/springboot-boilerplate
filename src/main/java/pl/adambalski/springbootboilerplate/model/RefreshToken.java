@@ -10,6 +10,9 @@ import java.time.Instant;
 import java.time.Period;
 import java.util.Objects;
 
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.COOKIE_SECURENESS;
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.REFRESH_TOKEN_EXPIRATION_PERIOD;
+
 /**
  * Is used for authenticating users that want to get an access token,
  * which you can use to authenticate to other endpoints.<br><br>
@@ -51,18 +54,19 @@ public final class RefreshToken {
         String token = randomAlphaNumericStringGenerator.generate();
 
         Instant now = Instant.now();
-        Period expirationPeriod = SecurityConfiguration.REFRESH_TOKEN_EXPIRATION_PERIOD;
+        Period expirationPeriod = REFRESH_TOKEN_EXPIRATION_PERIOD;
         java.sql.Date expirationDate = new Date(now.plus(expirationPeriod).toEpochMilli());
 
         return new RefreshToken(0, userLogin, token, expirationDate);
     }
 
     public Cookie toCookie() {
-        Cookie cookie = new Cookie("refresh_token", this.getToken());
+        Cookie cookie = new Cookie(SecurityConfiguration.REFRESH_TOKEN_COOKIE_NAME, this.getToken());
 
         int secondsToExpirationDate = (int)(expirationDate.getTime() - Instant.now().toEpochMilli()) / 1000;
         cookie.setMaxAge(secondsToExpirationDate);
 
+        cookie.setSecure(COOKIE_SECURENESS);
         cookie.setHttpOnly(true);
         // "/api/auth/authenticate" and "/api/auth/get-access-token"
         cookie.setPath("/api/auth/");

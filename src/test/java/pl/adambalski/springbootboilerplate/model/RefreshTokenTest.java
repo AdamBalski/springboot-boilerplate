@@ -15,6 +15,8 @@ import java.time.Period;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.REFRESH_TOKEN_COOKIE_NAME;
+import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration.REFRESH_TOKEN_EXPIRATION_PERIOD;
 
 class RefreshTokenTest {
     User user1;
@@ -281,7 +283,7 @@ class RefreshTokenTest {
 
     @Test
     void testCreateRefreshToken() {
-        Period expirationPeriod = SecurityConfiguration.REFRESH_TOKEN_EXPIRATION_PERIOD;
+        Period expirationPeriod = REFRESH_TOKEN_EXPIRATION_PERIOD;
         Date expirationDate = new Date(Instant.now().plus(expirationPeriod).toEpochMilli());
 
         int length = 12;
@@ -303,7 +305,7 @@ class RefreshTokenTest {
         assertTrue(cookie.isHttpOnly());
         assertFalse(cookie.getSecure());
         assertEquals("123456", cookie.getValue());
-        assertEquals("refresh_token", cookie.getName());
+        assertEquals(REFRESH_TOKEN_COOKIE_NAME, cookie.getName());
         String expectedPurpose = "The refresh token is used to " +
                 "make sure the client is log on, when getting the access token.";
         assertEquals(expectedPurpose, cookie.getComment());

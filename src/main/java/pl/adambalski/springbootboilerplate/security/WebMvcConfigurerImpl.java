@@ -41,7 +41,7 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
                 .allowedOrigins(origins)
                 .maxAge(maxAge);
 
-        registry.addMapping("/api/user/authenticate")
+        registry.addMapping("/api/auth/authenticate")
                 .allowCredentials(true)
                 .allowedMethods("POST")
                 .allowedOrigins(origins)

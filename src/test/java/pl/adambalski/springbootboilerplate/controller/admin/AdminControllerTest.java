@@ -15,6 +15,7 @@ import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.exception.NoSuchUserException;
 import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.repository.AdminRepository;
+import pl.adambalski.springbootboilerplate.repository.RefreshTokenRepository;
 import pl.adambalski.springbootboilerplate.repository.UserRepository;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
 import pl.adambalski.springbootboilerplate.service.AdminService;
@@ -47,6 +48,8 @@ public class AdminControllerTest {
     AdminRepository adminRepository;
     @MockBean
     UserRepository userRepository;
+    @MockBean
+    RefreshTokenRepository refreshTokenRepository;
 
     User mockUser;
 

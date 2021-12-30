@@ -37,6 +37,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final SecretKey KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     public static final Period REFRESH_TOKEN_EXPIRATION_PERIOD = Period.ofDays(365);
     public static final int REFRESH_TOKEN_LENGTH = 12;
+    public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
+    public static final String USERNAME_COOKIE_NAME = "username";
+    public static final boolean COOKIE_SECURENESS = false;
 
     private UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
@@ -66,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .csrfTokenRepository(csrfTokenRepository)
                         .ignoringRequestMatchers(
                                 new AntPathRequestMatcher(
-                                        "/api/user/authenticate",
+                                        "/api/auth/authenticate",
                                         HttpMethod.POST.name()),
                                 new AntPathRequestMatcher(
                                         "/api/user/sign-up",
