@@ -9,9 +9,11 @@ import pl.adambalski.springbootboilerplate.service.AdminService;
 import java.util.UUID;
 
 /**
- * AdminController <br><br>
+ * Provides a simple API for admins to make simple operations like getting other
+ * users' data, deleting their accounts and so on.<br><br>
  *
  * @see RestController
+ * @see AdminService
  * @author Adam Balski
  */
 @RestController

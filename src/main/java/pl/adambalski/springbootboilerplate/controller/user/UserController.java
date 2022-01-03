@@ -10,9 +10,11 @@ import pl.adambalski.springbootboilerplate.model.User;
 import pl.adambalski.springbootboilerplate.service.UserService;
 
 /**
- * UserController <br><br>
+ * Provides a simple API for users to make simple operations like getting their data,
+ * deleting their account, signing up and so on.<br><br>
  *
  * @see RestController
+ * @see UserService
  * @author Adam Balski
  */
 @RestController
