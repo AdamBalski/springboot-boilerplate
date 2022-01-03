@@ -26,18 +26,26 @@ public class AdminController {
     @GetMapping(value = "/api/admin/get-user-by-uuid")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
     public User getUserByUUID(@RequestParam UUID uuid) {
-        return adminService.getUserByUUID(uuid);
+        User user = adminService.getUserByUUID(uuid);
+        removePasswordInformation(user);
+        return user;
     }
 
     @GetMapping(value = "/api/admin/get-user-by-login")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
     public User getUserByLogin(@RequestParam String login) {
-        return adminService.getUserByLogin(login);
+        User user = adminService.getUserByLogin(login);
+        removePasswordInformation(user);
+        return user;
     }
 
     @DeleteMapping(value = "/api/admin/delete-user")
     @PreAuthorize(value = "hasAnyRole('ADMIN')")
     public void deleteUserByLogin(@RequestBody String login) {
         adminService.deleteByLogin(login);
+    }
+
+    private void removePasswordInformation(User user) {
+        user.setPassword(null);
     }
 }

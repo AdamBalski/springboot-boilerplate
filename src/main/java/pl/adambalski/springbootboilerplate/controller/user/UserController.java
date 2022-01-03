@@ -27,7 +27,9 @@ public class UserController {
     @GetMapping(value = "/api/user/get-data")
     @PreAuthorize(value = "hasAnyRole('USER', 'ADMIN')")
     public User getOwnData() {
-        return userService.getUserByLogin(getUsername());
+        User user = userService.getUserByLogin(getUsername());
+        removeUuidAndPasswordInformation(user);
+        return user;
     }
 
     @DeleteMapping(value = "/api/user/delete-logged-user")
@@ -48,5 +50,10 @@ public class UserController {
 
     private Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    private void removeUuidAndPasswordInformation(User user) {
+        user.setUuid(null);
+        user.setPassword(null);
     }
 }

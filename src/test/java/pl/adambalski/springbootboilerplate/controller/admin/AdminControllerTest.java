@@ -81,6 +81,7 @@ public class AdminControllerTest {
         when(adminService.getUserByUUID(uuid))
                 .thenReturn(mockUser);
 
+        mockUser.setPassword(null);
         String expected = new ObjectMapper().writeValueAsString(mockUser);
 
         mockMvc.perform(get("/api/admin/get-user-by-uuid/?uuid=" + uuid))

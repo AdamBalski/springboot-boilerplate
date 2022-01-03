@@ -83,6 +83,8 @@ public class UserControllerTest {
         when(userService.getUserByLogin(login))
                 .thenReturn(mockUser);
 
+        mockUser.setPassword(null);
+        mockUser.setUuid(null);
         String mockUserJson = new ObjectMapper().writeValueAsString(mockUser);
 
         mockMvc.perform(get("/api/user/get-data"))
@@ -124,6 +126,8 @@ public class UserControllerTest {
         when(userService.getUserByLogin(login))
                 .thenReturn(mockUser);
 
+        mockUser.setPassword(null);
+        mockUser.setUuid(null);
         String mockUserJson = new ObjectMapper().writeValueAsString(mockUser);
 
         mockMvc.perform(get("/api/user/get-data"))
