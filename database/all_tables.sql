@@ -1,7 +1,7 @@
 -- user
 CREATE TABLE "user"
 (
-    id        char(36)     NOT NULL,
+    id        uuid     NOT NULL,
     login     VARCHAR(30)  NOT NULL,
     full_name VARCHAR(50)  NOT NULL,
     email     VARCHAR(320) NOT NULL,
@@ -31,3 +31,5 @@ CREATE TABLE refresh_token
 
 ALTER TABLE refresh_token
     ADD CONSTRAINT uc_refresh_token_id UNIQUE (id);
+
+CREATE SEQUENCE refresh_token_id_gen;

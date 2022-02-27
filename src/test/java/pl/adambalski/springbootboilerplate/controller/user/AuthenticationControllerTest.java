@@ -69,7 +69,7 @@ public class AuthenticationControllerTest {
     }
 
 
-    // methods below test AuthenticationController.authenticate
+    // methods below test AuthenticationController.refresh
 
     @Test
     @WithMockUser(username = "mockusername", roles = "ADMIN")
@@ -199,12 +199,12 @@ public class AuthenticationControllerTest {
         cookie.setHttpOnly(true);
         // "/api/auth/authenticate" and "/api/auth/get-access-token"
         cookie.setPath("/api/auth/");
-        cookie.setComment("Username of the logged in user.");
+        cookie.setComment("Username of the logged-in user.");
 
         return cookie;
     }
 
-    // methods below test Authentication.authenticate
+    // methods below test AuthenticationController.authenticate
 
     @Test
     @WithMockUser(username = "mockusername", roles = "ADMIN")
@@ -273,7 +273,7 @@ public class AuthenticationControllerTest {
                 // 'username' cookie
                 .andExpect(cookie().exists(USERNAME_COOKIE_NAME))
                 .andExpect(cookie().exists(loginDto.username()))
-                .andExpect(cookie().comment(USERNAME_COOKIE_NAME, "Username of the logged in user."))
+                .andExpect(cookie().comment(USERNAME_COOKIE_NAME, "Username of the logged-in user."))
                 .andExpect(cookie().httpOnly(USERNAME_COOKIE_NAME, true))
                 .andExpect(cookie().secure(USERNAME_COOKIE_NAME, COOKIE_SECURENESS))
                 .andExpect(cookie().maxAge(REFRESH_TOKEN_COOKIE_NAME, maxAge));

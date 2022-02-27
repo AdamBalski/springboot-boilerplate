@@ -26,7 +26,8 @@ import static pl.adambalski.springbootboilerplate.security.SecurityConfiguration
 @Table(name = "refresh_token", schema = "public")
 public final class RefreshToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh_token_id_gen")
+    @SequenceGenerator(name = "refresh_token_id_gen", sequenceName = "refresh_token_id_gen", allocationSize = 1)
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
 

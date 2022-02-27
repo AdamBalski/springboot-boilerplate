@@ -15,7 +15,7 @@
     <description>Boilerplate for Springboot apps</description>
 
     <properties>
-        <java.version>16</java.version>
+        <java.version>17</java.version>
 
         <spring-boot.version>2.5.6</spring-boot.version>
         <spring-security-test.version>5.5.1</spring-security-test.version>

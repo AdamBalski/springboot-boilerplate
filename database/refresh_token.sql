@@ -9,3 +9,5 @@ CREATE TABLE refresh_token
 
 ALTER TABLE refresh_token
     ADD CONSTRAINT uc_refresh_token_id UNIQUE (id);
+
+CREATE SEQUENCE refresh_token_id_gen;

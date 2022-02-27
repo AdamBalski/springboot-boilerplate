@@ -68,9 +68,9 @@ public class AuthenticationController {
 
         cookie.setSecure(SecurityConfiguration.COOKIE_SECURENESS);
         cookie.setHttpOnly(true);
-        // "/api/auth/authenticate" and "/api/auth/get-access-token"
+        // "/api/auth/authenticate" and "/api/auth/refresh"
         cookie.setPath("/api/auth/");
-        cookie.setComment("Username of the logged in user.");
+        cookie.setComment("Username of the logged-in user.");
 
         return cookie;
     }
