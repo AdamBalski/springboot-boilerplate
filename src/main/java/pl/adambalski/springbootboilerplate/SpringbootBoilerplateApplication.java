@@ -7,6 +7,7 @@ import pl.adambalski.springbootboilerplate.logger.Logger;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 
 import java.util.Base64;
+import java.util.Objects;
 
 /**
  * Class that starts the server.<br><br>
@@ -19,7 +20,10 @@ public class SpringbootBoilerplateApplication {
         ConfigurableApplicationContext applicationContext = SpringApplication.run(SpringbootBoilerplateApplication.class, args);
         Logger logger = applicationContext.getBean("slf4jLogger", Logger.class);
 
-        logJwtKey(logger);
+        String isDebug = applicationContext.getEnvironment().getProperty("APP_DEVELOPMENT_PROFILE");
+        if(isDebug != null && isDebug.equalsIgnoreCase("true")) {
+            logJwtKey(logger);
+        }
     }
 
     private static void logJwtKey(Logger logger) {

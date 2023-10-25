@@ -44,7 +44,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;
 
-    @Autowired
     public SecurityConfiguration() {
         this.jwtUtil = new JwtUtil(KEY);
     }
@@ -65,16 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // CORS
                 .cors().and()
                 // CSRF
-                .csrf()
-                    .csrfTokenRepository(csrfTokenRepository)
-                        .ignoringRequestMatchers(
-                                new AntPathRequestMatcher(
-                                        "/api/auth/authenticate",
-                                        HttpMethod.POST.name()),
-                                new AntPathRequestMatcher(
-                                        "/api/user/sign-up",
-                                        HttpMethod.PUT.name()
-                                )).and()
+                .csrf().disable()
                 // Sessions
                 .sessionManagement().disable()
                 // 401 instead of 403 for unauthenticated people

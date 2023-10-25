@@ -14,6 +14,7 @@ import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.security.util.JwtUtil;
 import pl.adambalski.springbootboilerplate.service.AuthenticationService;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.Date;
@@ -47,6 +48,7 @@ public class AuthenticationController {
     @PostMapping(value = "/api/auth/authenticate")
     @PreAuthorize(value = "isAnonymous()")
     public void authenticate(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+        System.out.println("auth");
         RefreshToken refreshToken = authenticationService.authenticate(loginDto);
 
         response.addCookie(refreshToken.toCookie());
@@ -57,7 +59,7 @@ public class AuthenticationController {
     @PreAuthorize(value = "permitAll()")
     public JwtTokenDto refresh(@CookieValue(USERNAME_COOKIE_NAME) String username,
                                @CookieValue(REFRESH_TOKEN_COOKIE_NAME) String refreshTokenValue) {
-         return authenticationService.refresh(username, refreshTokenValue);
+        return authenticationService.refresh(username, refreshTokenValue);
     }
 
     private Cookie createUsernameCookie(String username, Date expirationDate) {

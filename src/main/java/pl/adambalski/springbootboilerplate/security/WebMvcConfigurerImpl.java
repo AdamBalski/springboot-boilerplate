@@ -35,6 +35,7 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        // todo, tighten constraints
         registry.addMapping("/api/**")
                 .allowCredentials(false)
                 .allowedMethods(allowedMethods)
