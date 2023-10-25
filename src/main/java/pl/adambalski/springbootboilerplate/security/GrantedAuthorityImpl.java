@@ -1,8 +1,7 @@
 package pl.adambalski.springbootboilerplate.security;
 
-import pl.adambalski.springbootboilerplate.model.Role;
-
 import org.springframework.security.core.GrantedAuthority;
+import pl.adambalski.springbootboilerplate.model.Role;
 
 /**
  * Simple {@link GrantedAuthority} implementation.

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.security.PasswordEncoderFactory;
-import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 import pl.adambalski.springbootboilerplate.util.RandomAlphaNumericStringGenerator;
 
 import javax.servlet.http.Cookie;
