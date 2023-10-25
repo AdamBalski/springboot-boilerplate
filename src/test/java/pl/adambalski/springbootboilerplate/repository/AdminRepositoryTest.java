@@ -3,12 +3,17 @@ package pl.adambalski.springbootboilerplate.repository;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
 import pl.adambalski.springbootboilerplate.model.User;
@@ -20,16 +25,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ComponentScan(basePackages = {
-        "pl.adambalski.springbootboilerplate.repository",
-        "pl.adambalski.springbootboilerplate.security"
+        "pl.adambalski.springbootboilerplate.repository"
 },
         useDefaultFilters = false,
         includeFilters = {
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
                         classes = {
-                                PasswordEncoderFactory.class,
-                                AdminRepository.class
+                                UserRepository.class,
                         }
                 )
         }
@@ -37,8 +40,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class AdminRepositoryTest {
+    @Container
     @Rule
-    PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12.7");
+    public PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12.7");
 
     @Autowired
     AdminRepository adminRepository;

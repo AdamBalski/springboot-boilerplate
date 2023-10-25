@@ -133,7 +133,7 @@ class RefreshTokenRepositoryTest {
     }
 
     @Test
-    void testDeleteALlExpiredWhenNoneRefreshTokensAreExpired() {
+    void testDeleteAllExpiredWhenNoneRefreshTokensAreExpired() {
         userRepository.saveAll(users);
         refreshTokenRepository.saveAll(nonExpired);
 

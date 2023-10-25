@@ -19,7 +19,7 @@ import java.util.UUID;
  * @author Adam Balski
  */
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "\"user\"", schema = "public")
 public final class User {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "uuid", unique = true, updatable = false)

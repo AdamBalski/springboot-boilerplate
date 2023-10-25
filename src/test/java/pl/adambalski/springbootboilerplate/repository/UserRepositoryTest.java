@@ -1,14 +1,21 @@
 package pl.adambalski.springbootboilerplate.repository;
 
 import org.junit.Rule;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import pl.adambalski.springbootboilerplate.dto.SignUpUserDto;
@@ -30,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
                         classes = {
-                                UserRepository.class
+                                UserRepository.class,
                         }
                 )
         }
@@ -39,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
     @Rule
-    PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12.7");
+    public PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:12.7");
     
     @Autowired
     UserRepository userRepository;

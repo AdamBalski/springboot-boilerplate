@@ -3,6 +3,7 @@ package pl.adambalski.springbootboilerplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import pl.adambalski.springbootboilerplate.logger.Logger;
 import pl.adambalski.springbootboilerplate.security.SecurityConfiguration;
 
