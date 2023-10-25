@@ -1,0 +1,29 @@
+services:
+  app:
+    image: 'spring-boot-boilerplate:latest'
+    container_name: app
+    build: .
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+    - db
+    environment:
+      - POSTGRES_USER=server
+      - POSTGRES_DB=spring_boot_boilerplate
+      - POSTGRES_PORT=5432
+      - POSTGRES_JDBC_URL=jdbc:postgresql://db:5432/spring_boot_boilerplate
+      - POSTGRES_PASSWORD=password
+      - APP_DEVELOPMENT_PROFILE=TRUE
+  db:
+    image: 'postgres:12.9'
+    container_name: db
+    restart: always
+    volumes:
+      - "./database/all_tables.sql:/docker-entrypoint-initdb.d/init.sql"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=server
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=spring_boot_boilerplate

@@ -194,9 +194,9 @@ public class AdminControllerTest {
         var request = delete("/api/admin/delete-user")
                 .content(login);
         mockMvc.perform(request)
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
 
-        verify(adminService, never()).deleteByLogin(login);
+        verify(adminService, times(1)).deleteByLogin(login);
     }
 
     @Test

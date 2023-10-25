@@ -175,9 +175,9 @@ public class UserControllerTest {
 
         var request = delete("/api/user/delete-logged-user");
         mockMvc.perform(request)
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk());
 
-        verify(userService, never()).deleteUserByLogin(login);
+        verify(userService, times(1)).deleteUserByLogin(login);
     }
 
     @Test

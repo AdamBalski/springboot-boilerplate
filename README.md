@@ -1,18 +1,29 @@
 # Spring Boot Boilerplate
-## Template for spring boot applications. It includes user management via a rest api, uses JWTs for auth(and refresh tokens stored in cookies).
+### Template for spring boot applications. It includes user management via a rest api, uses JWTs for auth(and refresh tokens stored in cookies).
 
 
-### Running as a docker image
-To create the image:
+## Running and testing
+### Prerequisites
+* docker with docker compose
+* maven
+* JDK >= 17
+### Run the app
+To create the image, create a `./docker-compose.yml` file. You can source a template with:
+```bash
+cp docker-compose.yml.template docker-compose.yml
+```
+Then, compile the web-app into a docker container.
+
 ```bash
 mvn spring-boot:build-image -Dspring-boot.build-image.imageName=spring-boot-boilerplate
 ```
-Then run `docker-compose up` to start the application and the app will listen on port 8080.
+Having done that, run `docker compose up` to start the application and the app will listen on port 8080.
+### Test
+```bash
+mvn clean test
+```
 
-### Prerequisites to run separately
-If you want to start the application without using docker, then first you have to set up a database and make appropriate changes to a file called `application.properties` in `src/main/java/resources`.
-
-### Done with: (for more info check `pom.xml`)
+## Done with: (for more info check `pom.xml`)
 * jdk 17 (with preview features turned on)
 * maven
 * spring boot
