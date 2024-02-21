@@ -19,7 +19,7 @@
 
         <spring-boot.version>2.5.2</spring-boot.version>
         <spring-security-test.version>5.5.1</spring-security-test.version>
-        <postgresql.version>42.6.0</postgresql.version>
+        <postgresql.version>42.7.2</postgresql.version>
         <mockito.version>5.3.1</mockito.version>
         <mockito-inline.version>5.2.0</mockito-inline.version>
         <jjwt.version>0.11.5</jjwt.version>
